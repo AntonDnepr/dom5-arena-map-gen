@@ -1,0 +1,57 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "<3"                        # Basics stuff (BSD-3)
+django-environ = "*"                 # Configuration by environment variables according to 12Factor model (MIT)
+django-rest-framework = "*"          # Tools for RESTful API (BSD-2)
+psycopg2-binary = "*"                # Database connector (LGPL)
+gunicorn = "*"                       # Python WSGI HTTP Server
+django-cors-headers = "*"
+django-extensions = "*"             # Different helpers for Django REST Framework
+django-rq = "*"                     # Asynchronous tasks
+django-redis = "*"                  # Redis cache backend (BSD-3)
+django-rest-auth = "*"
+djangorestframework-simplejwt = "*"
+whitenoise = "*"
+drf-yasg = "*"
+argon2-cffi = "*"
+django-anymail = {extras = ["mailgun"],version = "*"}
+
+[dev-packages]
+ipdb = "*"                           # Debugging
+mypy = "*"
+django-stubs = "*"
+djangorestframework-stubs = "*"
+factory_boy = "*"                   # Mocked Test data
+coverage = "*"
+django-coverage-plugin = "*"
+ipython = "*"                        # Better Python shell
+pre-commit = "*"
+prospector = ">=1.1.6.4"
+Faker = "*"
+black = "==19.3b0"
+flake8 = "==3.5.0"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
+autopep8 = "==1.4"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
+isort = "*"
+django-silk = "*"
+pytest = "==5.3.5"                   # Better testing
+pytest-django = "*"
+pytest-xdist = "*"
+pytest-factoryboy = "*"
+pytest-freezegun = "*"
+pytest-mock = "*"
+pytest-sugar = "*"
+pytest-env = "*"
+django-extensions = "*"
+
+[requires]
+python_version = "3.7"
+
+[scripts]
+go-docker = "docker-compose up -d"
+create-coverage = "coverage run -m py.test"
+check-coverage = "coverage report --fail-under=95"
+codecov-report = "coverage xml"

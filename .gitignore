@@ -1,0 +1,94 @@
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.hypothesis
+nosetests.xml
+coverage.xml
+
+# Created by .ignore support plugin (hsz.mobi)
+### Sass template
+.sass-cache
+*.css.map
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+local_wsgi.py
+
+# misc
+.DS_Store
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and editors
+/.idea
+*.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.idea
+
+# Virtual venvs
+.venv
+venv/
+*.pyc
+bin/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+*.sqlite3
+
+# C extensions
+*.so
+*.sql
+*.~
+
+
+media/
+static/
+db/
+logs/
+pids/
+static_content/
+CACHE/
+SCSS_CACHE/
+pylint_*
+node_modules/
+.vscode/
+include/python3.6m
+pip-selfcheck.json
+
+# PyTest cache
+.pytest_cache/
+
+# MyPy cache
+.mypy_cache/
