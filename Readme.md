@@ -1,5 +1,3 @@
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/test/your-project/tree/master)
-
 ## Install & Run Locally
 
 First you need to write your `.env` file with correct variables: when using the dockerized
