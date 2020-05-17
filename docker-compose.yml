@@ -18,7 +18,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     command: -c fsync=off -c synchronous_commit=off -c full_page_writes=off
     networks:
-      - default_template
+      - default_dom5
     ports:
       - "${DOCKER_POSTGRES_PORT}:5432"
 
@@ -31,7 +31,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - default_template
+      - default_dom5
     ports:
       - "${DOCKER_REDIS_PORT}:6379"
 
@@ -41,7 +41,7 @@ services:
       context: ./
     restart: on-failure
     container_name: ${PROJECT_NAME}_backend
-    image:  ${PROJECT_NAME}_backend
+    image: ${PROJECT_NAME}_backend
     volumes:
       - .:/usr/src/app
     environment:
@@ -64,7 +64,7 @@ services:
       - RQ_PORT=${DOCKER_REDIS_PORT}
     command: /bin/bash -c "PIPENV_DONT_LOAD_ENV=1 python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
-      - default_template
+      - default_dom5
     ports:
       - "${DOCKER_BACKEND_PORT}:8000"
     working_dir: /usr/src/app
@@ -102,7 +102,7 @@ services:
     volumes:
       - .:/usr/src/app
     networks:
-      - default_template
+      - default_dom5
     working_dir: /usr/src/app
     command: /bin/bash -c "PIPENV_DONT_LOAD_ENV=1 python manage.py rqworker email high default"
     stdin_open: true
@@ -112,6 +112,6 @@ services:
       - redis
 
 networks:
-  default_template:
+  default_dom5:
     ipam:
       driver: default

@@ -145,6 +145,7 @@ INSTALLED_APPS = [
     "rest_auth",
     "django_rq",
     "apps.core",
+    "apps.domdata",
     "apps.users",
 ]
 

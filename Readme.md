@@ -1,3 +1,21 @@
+## Purpose of the project
+
+Main purpose of this project is to automate map generation for the Arena map at Dominions 5 game.
+
+
+## Credits
+Original Arena map:
+https://steamcommunity.com/sharedfiles/filedetails/?id=1404827698
+
+Please support author of the Arena map: http://www.youtube.com/dastactic
+
+Also this project make extensive use of the data from:
+https://github.com/larzm42/dom5inspector
+
+All credits for data dumps into csv formats goes to them.
+
+
+# Development guide
 ## Install & Run Locally
 
 First you need to write your `.env` file with correct variables: when using the dockerized
