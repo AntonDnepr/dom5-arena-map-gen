@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "<3"                        # Basics stuff (BSD-3)
+django = "*"                        # Basics stuff (BSD-3)
 django-environ = "*"                 # Configuration by environment variables according to 12Factor model (MIT)
 django-rest-framework = "*"          # Tools for RESTful API (BSD-2)
 psycopg2-binary = "*"                # Database connector (LGPL)
@@ -19,9 +19,6 @@ django-anymail = {extras = ["mailgun"],version = "*"}
 
 [dev-packages]
 ipdb = "*"                           # Debugging
-mypy = "*"
-django-stubs = "*"
-djangorestframework-stubs = "*"
 factory_boy = "*"                   # Mocked Test data
 coverage = "*"
 django-coverage-plugin = "*"
@@ -29,12 +26,12 @@ ipython = "*"                        # Better Python shell
 pre-commit = "*"
 prospector = ">=1.1.6.4"
 Faker = "*"
-black = "==19.3b0"
-flake8 = "==3.5.0"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
-autopep8 = "==1.4"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
+black = "==20.8b1"
+flake8 = "*"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
+autopep8 = "*"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
 isort = "*"
 django-silk = "*"
-pytest = "==5.3.5"                   # Better testing
+pytest = "*"                   # Better testing
 pytest-django = "*"
 pytest-xdist = "*"
 pytest-factoryboy = "*"

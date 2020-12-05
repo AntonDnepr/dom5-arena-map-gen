@@ -14,16 +14,21 @@ class BaseModel(models.Model):
 
 
 class Nation(BaseModel):
+    EARLY, MIDDLE, LATE = 1, 2, 3
+
+    ERA_CHOICES = ((EARLY, "EA"), (MIDDLE, "MA"), (LATE, "LA"))
+
     dominion_id = models.PositiveIntegerField(db_index=True, unique=True)
+    era = models.PositiveSmallIntegerField(choices=ERA_CHOICES)
 
 
 class Commander(BaseModel):
     dominion_id = models.PositiveIntegerField(db_index=True, unique=True)
-    general = models.BooleanField(default=True)
+    indy = models.BooleanField(default=True)
     nations = models.ManyToManyField(Nation)
 
 
 class Unit(BaseModel):
     dominion_id = models.PositiveIntegerField(db_index=True, unique=True)
-    general = models.BooleanField(default=True)
+    indy = models.BooleanField(default=True)
     nations = models.ManyToManyField(Nation)
