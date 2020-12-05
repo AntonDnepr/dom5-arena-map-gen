@@ -21,14 +21,11 @@ class Nation(BaseModel):
     dominion_id = models.PositiveIntegerField(db_index=True, unique=True)
     era = models.PositiveSmallIntegerField(choices=ERA_CHOICES)
 
-
-class Commander(BaseModel):
-    dominion_id = models.PositiveIntegerField(db_index=True, unique=True)
-    indy = models.BooleanField(default=True)
-    nations = models.ManyToManyField(Nation)
+    def __str__(self):
+        return f"({self.get_era_display()}){self.name}"
 
 
 class Unit(BaseModel):
     dominion_id = models.PositiveIntegerField(db_index=True, unique=True)
-    indy = models.BooleanField(default=True)
+    commander = models.BooleanField(default=False)
     nations = models.ManyToManyField(Nation)
