@@ -1,7 +1,7 @@
 import csv
 import os
 
-from .models import Nation, Unit
+from apps.domdata.models import Nation, Unit
 
 
 def parse_units():
@@ -50,4 +50,39 @@ def parse_units():
             for row in reader:
                 nation = Nation.objects.get(dominion_id=row["nation_number"])
                 unit = Unit.objects.get(dominion_id=row["monster_number"])
+                unit.nations.add(nation)
+
+    special_troop_file = "csvs/attributes_by_nation.csv"
+    commander_attributes_numbers = [
+        158,
+        159,
+        163,
+        186,
+        295,
+        297,
+        299,
+        301,
+        303,
+        405,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        149,
+    ]
+    with open(
+        os.path.join(current_dir, special_troop_file), "r", newline=""
+    ) as csv_file:
+        reader = csv.DictReader(csv_file, delimiter="\t")
+        for row in reader:
+            nation = Nation.objects.get(dominion_id=row["nation_number"])
+            unit = Unit.objects.filter(dominion_id=row["raw_value"]).first()
+            if unit:
+                if int(row["attribute"]) in commander_attributes_numbers:
+                    unit.commander = True
+                    unit.save(update_fields=["commander"])
                 unit.nations.add(nation)
