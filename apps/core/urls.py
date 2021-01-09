@@ -1,7 +1,16 @@
 from django.urls import path
 
-from apps.core.views import AutocompleteUnitView
+from apps.core.views import AutocompleteNationsView, AutocompleteUnitsView
 
 urlpatterns = [
-    path("autocomplete/", AutocompleteUnitView.as_view(), name="autocompleteview")
+    path(
+        "autocomplete/units/",
+        AutocompleteUnitsView.as_view(),
+        name="autocomplete_units_view",
+    ),
+    path(
+        "autocomplete/nations/",
+        AutocompleteNationsView.as_view(),
+        name="autocomplete_nations_view",
+    ),
 ]
