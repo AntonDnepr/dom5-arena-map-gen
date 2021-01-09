@@ -1,6 +1,6 @@
 ## Purpose of the project
 
-Main purpose of this project is to automate map generation for the Arena map at Dominions 5 game.
+Main purpose of this project is to automate map generation for the Arena map at [Dominions 5](http://www.illwinter.com/dom5) game.
 
 
 ## Credits
@@ -12,7 +12,7 @@ Please support author of the Arena map: http://www.youtube.com/dastactic
 Also this project make extensive use of the data from:
 https://github.com/larzm42/dom5inspector
 
-All credits for data dumps into csv formats goes to them.
+All credits for data dumps into csv format goes to them.
 
 
 # Development guide
