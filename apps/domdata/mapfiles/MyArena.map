@@ -20,7 +20,7 @@ The Land Arena and Water Arena in the centre of the map should have their defend
 Author: DasTactic (http://www.youtube.com/dastactic)"
 #scenario
 
-#allowedplayer {{land_player1}}
+#allowedplayer $land_player1
 #specstart 28 5
 
 #setland 5
@@ -33,18 +33,18 @@ Author: DasTactic (http://www.youtube.com/dastactic)"
 -- Water Arena
 
 -- MA Pel
-#allowedplayer {{water_player1}}
+#allowedplayer $water_player1
 #specstart 75 12
 
 #setland 12
 
-#allowedplayer {{water_player2}}
+#allowedplayer $water_player2
 #specstart 10 14
 
 #setland 14
 
 --vs EA Ermor
-#allowedplayer {{land_player2}}
+#allowedplayer $land_player2
 #specstart 6 8
 #setland 8
 
