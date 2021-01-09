@@ -1,6 +1,7 @@
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
-router = DefaultRouter()
+from apps.core.views import AutocompleteUnitView
 
-urlpatterns = []
-urlpatterns += router.urls
+urlpatterns = [
+    path("autocomplete/", AutocompleteUnitView.as_view(), name="autocompleteview")
+]
