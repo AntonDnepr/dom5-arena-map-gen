@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
 import Autosuggest from 'react-autosuggest';
 
+
 const getSuggestions = (value, nations) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
@@ -35,6 +36,7 @@ class NationSuggestions extends React.Component {
     this.setState({
       value: newValue
     });
+    this.props.selectNation(newValue);
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -74,7 +76,7 @@ class NationSuggestions extends React.Component {
 }
 
 
-const Step1 = ({nations, isLoading}) => {
+const Step1 = ({nations, isLoading, selectLandNations, selectWaterNations}) => {
   return (
   <>
     <Row>
@@ -84,10 +86,10 @@ const Step1 = ({nations, isLoading}) => {
       </Row>
       <Row>
         <Col>
-            Land nation 1: {isLoading ? "loading" : <NationSuggestions nations={nations} id="land1"/>}
+            Land nation 1: {isLoading ? "loading" : <NationSuggestions nations={nations} selectNation={selectLandNations[0]} id="land1"/>}
         </Col>
         <Col>
-            Land nation 2: {isLoading ? "loading" : <NationSuggestions nations={nations} id="land2"/>}
+            Land nation 2: {isLoading ? "loading" : <NationSuggestions nations={nations} selectNation={selectLandNations[1]} id="land2"/>}
         </Col>
       </Row>
       <Row>
@@ -97,10 +99,10 @@ const Step1 = ({nations, isLoading}) => {
       </Row>
       <Row>
         <Col>
-            Water nation 1: {isLoading ? "loading" : <NationSuggestions nations={nations} id="water1"/>}
+            Water nation 1: {isLoading ? "loading" : <NationSuggestions nations={nations} selectNation={selectWaterNations[0]} id="water1"/>}
         </Col>
         <Col>
-            Water nation 2: {isLoading ? "loading" : <NationSuggestions nations={nations} id="water2"/>}
+            Water nation 2: {isLoading ? "loading" : <NationSuggestions nations={nations} selectNation={selectWaterNations[1]} id="water2"/>}
         </Col>
       </Row>
    </>
@@ -111,6 +113,10 @@ const Step1 = ({nations, isLoading}) => {
 function App() {
   const [nations, setNations ] = useState([])
   const [isLoading, setLoading ] = useState(false)
+  const [selectedLandNation1, selectLandNation1] = useState("")
+  const [selectedLandNation2, selectLandNation2] = useState("")
+  const [selectedWaterNation1, selectWaterNation1] = useState("")
+  const [selectedWaterNation2, selectWaterNation2] = useState("")
 
   useEffect(() => {
     if(nations.length < 1 && !isLoading){
@@ -121,10 +127,13 @@ function App() {
           setNations(response.data)
         })
     }
-  }, nations)
+  }, [nations.length, isLoading])
   return (
     <Container>
-      <Step1 nations={nations} isLoading={isLoading} />
+        <Step1 nations={nations}
+        isLoading={isLoading}
+        selectLandNations={[selectLandNation1, selectLandNation2]}
+        selectWaterNations={[selectWaterNation1, selectWaterNation2]}/>
     </Container>
   );
 }
