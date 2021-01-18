@@ -36,7 +36,7 @@ class NationSuggestions extends React.Component {
       value: newValue
     });
   }
-  
+
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(value, this.props.nations)
@@ -74,24 +74,10 @@ class NationSuggestions extends React.Component {
 }
 
 
-function App() {
-  const [nations, setNations ] = useState([])
-  const [isLoading, setLoading ] = useState(false)
-
-  useEffect(() => {
-    if(nations.length < 1 && !isLoading){
-      setLoading(true)
-      axios.get('/api/v0/autocomplete/nations/')
-        .then((response) => {
-          setLoading(false)
-          setNations(response.data)
-        })
-    }
-  })
-
+const Step1 = ({nations, isLoading}) => {
   return (
-    <Container>
-      <Row>
+  <>
+    <Row>
         <Col>
           Select land nations
         </Col>
@@ -117,6 +103,28 @@ function App() {
             Water nation 2: {isLoading ? "loading" : <NationSuggestions nations={nations} id="water2"/>}
         </Col>
       </Row>
+   </>
+   );
+}
+
+
+function App() {
+  const [nations, setNations ] = useState([])
+  const [isLoading, setLoading ] = useState(false)
+
+  useEffect(() => {
+    if(nations.length < 1 && !isLoading){
+      setLoading(true)
+      axios.get('/api/v0/autocomplete/nations/')
+        .then((response) => {
+          setLoading(false)
+          setNations(response.data)
+        })
+    }
+  }, nations)
+  return (
+    <Container>
+      <Step1 nations={nations} isLoading={isLoading} />
     </Container>
   );
 }
