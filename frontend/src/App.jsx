@@ -1,6 +1,8 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col } from 'reactstrap';
+import {
+  Container, Row, Col, Button,
+} from 'reactstrap';
 import React, { useState, useEffect } from 'react';
 import Autosuggest from 'react-autosuggest';
 import PropTypes from 'prop-types';
@@ -38,8 +40,15 @@ class NationSuggestions extends React.Component {
     this.setState({
       value: newValue,
     });
+    if (newValue === '') {
+      const { selectNation } = this.props;
+      selectNation(newValue);
+    }
+  }
+
+  onSuggestionSelected = (event, { suggestionValue }) => {
     const { selectNation } = this.props;
-    selectNation(newValue);
+    selectNation(suggestionValue);
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -72,6 +81,7 @@ class NationSuggestions extends React.Component {
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
+        onSuggestionSelected={this.onSuggestionSelected}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
       />
@@ -132,16 +142,25 @@ Step1.propTypes = {
   selectWaterNations: PropTypes.arrayOf(PropTypes.func).isRequired,
 };
 
+const NextStepButton = ({ setCurrentStep }) => (
+  <Row>
+    <Col>
+      <Button onClick={() => setCurrentStep('step2')}>Show next step</Button>
+    </Col>
+  </Row>
+);
+
+NextStepButton.propTypes = {
+  setCurrentStep: PropTypes.func.isRequired,
+};
+
 function App() {
   const [nations, setNations] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  // eslint-disable-next-line no-unused-vars
+  const [currentStep, setCurrentStep] = useState('step1');
   const [selectedLandNation1, selectLandNation1] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [selectedLandNation2, selectLandNation2] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [selectedWaterNation1, selectWaterNation1] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [selectedWaterNation2, selectWaterNation2] = useState('');
 
   useEffect(() => {
@@ -154,14 +173,20 @@ function App() {
         });
     }
   }, [nations.length, isLoading]);
+  const showNextStep = [
+    selectedLandNation1, selectedLandNation2, selectedWaterNation1, selectedWaterNation2,
+  ].some((x) => x !== '');
   return (
     <Container>
+      {currentStep === 'step1' && (
       <Step1
         nations={nations}
         isLoading={isLoading}
         selectLandNations={[selectLandNation1, selectLandNation2]}
         selectWaterNations={[selectWaterNation1, selectWaterNation2]}
       />
+      )}
+      {showNextStep && <NextStepButton setCurrentStep={setCurrentStep} />}
     </Container>
   );
 }
