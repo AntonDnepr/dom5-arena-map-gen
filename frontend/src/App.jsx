@@ -142,7 +142,7 @@ Step1.propTypes = {
   selectWaterNations: PropTypes.arrayOf(PropTypes.func).isRequired,
 };
 
-const NextStepButton = ({ setCurrentStep }) => (
+const NextStepButton1 = ({ setCurrentStep }) => (
   <Row>
     <Col>
       <Button onClick={() => setCurrentStep('step2')}>Show next step</Button>
@@ -150,14 +150,41 @@ const NextStepButton = ({ setCurrentStep }) => (
   </Row>
 );
 
-NextStepButton.propTypes = {
+NextStepButton1.propTypes = {
   setCurrentStep: PropTypes.func.isRequired,
+};
+
+const Step2 = ({ selectedNation }) => (
+  <Row>
+    <Col>
+      <p>{selectedNation}</p>
+    </Col>
+  </Row>
+);
+
+const NextNationButton = ({ setNationIndex, nationIndex }) => (
+  <Row>
+    <Col>
+      <Button onClick={() => setNationIndex(nationIndex + 1)}>Configure next nation</Button>
+    </Col>
+  </Row>
+);
+
+NextNationButton.propTypes = {
+  setNationIndex: PropTypes.func.isRequired,
+  nationIndex: PropTypes.number.isRequired,
+};
+
+Step2.propTypes = {
+  selectedNation: PropTypes.string.isRequired,
 };
 
 function App() {
   const [nations, setNations] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState('step1');
+  const [nationForStep2, setNationForStep2] = useState('');
+  const [nationIndex, setNationIndex] = useState(0);
   const [selectedLandNation1, selectLandNation1] = useState('');
   const [selectedLandNation2, selectLandNation2] = useState('');
   const [selectedWaterNation1, selectWaterNation1] = useState('');
@@ -173,9 +200,20 @@ function App() {
         });
     }
   }, [nations.length, isLoading]);
-  const showNextStep = [
+  const selectedNationsArray = [
     selectedLandNation1, selectedLandNation2, selectedWaterNation1, selectedWaterNation2,
-  ].some((x) => x !== '');
+  ];
+  const showNextStep = selectedNationsArray.some((x) => x !== '') && currentStep === 'step1';
+  const lengthOfNations = selectedNationsArray.filter((x) => x !== '').length;
+  const showNextNation = lengthOfNations > nationIndex + 1;
+  if (currentStep === 'step2') {
+    // eslint-disable-next-line prefer-destructuring
+    const selectedNation = selectedNationsArray.filter((x) => x !== '')[nationIndex];
+    if (selectedNation !== nationForStep2) {
+      setNationForStep2(selectedNation);
+    }
+  }
+
   return (
     <Container>
       {currentStep === 'step1' && (
@@ -186,7 +224,23 @@ function App() {
         selectWaterNations={[selectWaterNation1, selectWaterNation2]}
       />
       )}
-      {showNextStep && <NextStepButton setCurrentStep={setCurrentStep} />}
+      {showNextStep && (
+      <NextStepButton1
+        setCurrentStep={setCurrentStep}
+      />
+      )}
+      {currentStep === 'step2' && (
+        <>
+          <Step2 selectedNation={nationForStep2} />
+          {showNextNation
+          && (
+          <NextNationButton
+            setNationIndex={setNationIndex}
+            nationIndex={nationIndex}
+          />
+          )}
+        </>
+      )}
     </Container>
   );
 }
