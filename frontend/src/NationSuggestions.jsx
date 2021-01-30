@@ -87,7 +87,7 @@ class NationSuggestions extends React.Component {
 
 NationSuggestions.propTypes = {
   selectNation: PropTypes.func.isRequired,
-  nations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  nations: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default NationSuggestions;

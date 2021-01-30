@@ -50,7 +50,7 @@ const Step1 = ({
 );
 
 Step1.propTypes = {
-  nations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  nations: PropTypes.arrayOf(PropTypes.object).isRequired,
   isLoading: PropTypes.bool.isRequired,
   selectLandNations: PropTypes.arrayOf(PropTypes.func).isRequired,
   selectWaterNations: PropTypes.arrayOf(PropTypes.func).isRequired,
