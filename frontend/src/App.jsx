@@ -68,36 +68,45 @@ NextStepButton1.propTypes = {
   setCurrentStep: PropTypes.func.isRequired,
 };
 
-const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => (
-  <>
-    <Row>
-      <Col>
-        <p>{selectedNation}</p>
-      </Col>
-    </Row>
-    <Row>
-      <Col>
-        {selectedCommanders.map((commander) => (
-          <p key={`${commander.id}`}>
-            (
-            {commander.dominion_id}
-            )
-            {commander.name}
-          </p>
-        ))}
-      </Col>
-    </Row>
-    <Row>
-      <Col>
-        <p>Select commanders</p>
-        <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} />
-      </Col>
-      <Col>
-        <p>Select units to add to the commanders</p>
-      </Col>
-    </Row>
-  </>
-);
+const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
+  const deleteRow = (uuid, arrayToFilter) => {
+    const newSelection = arrayToFilter.filter((obj) => obj.id !== uuid);
+    selectCommander(newSelection);
+  };
+
+  return (
+    <>
+      <Row>
+        <Col>
+          <p>{selectedNation}</p>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {selectedCommanders.map((commander) => (
+            <p key={`${commander.id}`}>
+              (
+              {commander.dominion_id}
+              )
+              {commander.name}
+              {' '}
+              <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
+            </p>
+          ))}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <p>Select commanders</p>
+          <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} />
+        </Col>
+        <Col>
+          <p>Select units to add to the commanders</p>
+        </Col>
+      </Row>
+    </>
+  );
+};
 
 Step2.propTypes = {
   selectedNation: PropTypes.string.isRequired,
