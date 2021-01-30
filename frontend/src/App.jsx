@@ -77,7 +77,14 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => (
     </Row>
     <Row>
       <Col>
-        {selectedCommanders.map((commander) => <p key={`${commander.dominion_id}`}>{commander.name}</p>)}
+        {selectedCommanders.map((commander) => (
+          <p key={`${commander.id}`}>
+            (
+            {commander.dominion_id}
+            )
+            {commander.name}
+          </p>
+        ))}
       </Col>
     </Row>
     <Row>
@@ -86,7 +93,7 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => (
         <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} />
       </Col>
       <Col>
-        <p>Select units to add to that commander</p>
+        <p>Select units to add to the commanders</p>
       </Col>
     </Row>
   </>

@@ -4,6 +4,15 @@ import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import PropTypes from 'prop-types';
 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    // eslint-disable-next-line no-bitwise
+    const r = Math.random() * 16 | 0; const
+      v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 const getUnitSuggestions = (value) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
@@ -47,6 +56,7 @@ class UnitSuggestions extends React.Component {
       const generatedObject = {
         dominion_id: splittedString[0],
         name: splittedString[1],
+        id: uuidv4(),
       };
       const newSelected = [...selectedUnits, generatedObject];
       selectUnit(newSelected);
