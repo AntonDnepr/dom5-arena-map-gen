@@ -90,6 +90,8 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
               )
               {commander.name}
               {' '}
+              <Button color="info">Duplicate</Button>
+              {' '}
               <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
             </p>
           ))}

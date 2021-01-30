@@ -1,18 +1,9 @@
-/* eslint-disable no-bitwise */
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import PropTypes from 'prop-types';
-
-function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0; const
-      // eslint-disable-next-line no-mixed-operators
-      v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
+import uuidv4 from './utils';
 
 const getUnitSuggestions = (value) => {
   const inputValue = value.trim().toLowerCase();
