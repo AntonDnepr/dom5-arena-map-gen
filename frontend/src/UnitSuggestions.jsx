@@ -10,12 +10,12 @@ const getUnitSuggestions = (value) => {
   if (inputLength >= 3) {
     // setLoading(true);
     return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`)
-      .then((response) => { console.log(response.data); return response.data; });
+      .then((response) => response.data);
   }
   return [];
 };
 
-const getUnitSuggestionValue = (suggestion) => `${suggestion.dominion_id}`;
+const getUnitSuggestionValue = (suggestion) => `${suggestion.dominion_id}/${suggestion.name}`;
 
 const renderUnitSuggestion = (suggestion) => (
   <div>
@@ -42,8 +42,14 @@ class UnitSuggestions extends React.Component {
     }
 
     onSuggestionSelected = (event, { suggestionValue }) => {
-      const { selectUnit } = this.props;
-      selectUnit(suggestionValue);
+      const { selectUnit, selectedUnits } = this.props;
+      const splittedString = suggestionValue.split('/');
+      const generatedObject = {
+        dominion_id: splittedString[0],
+        name: splittedString[1],
+      };
+      const newSelected = [...selectedUnits, generatedObject];
+      selectUnit(newSelected);
     }
 
     onSuggestionsFetchRequested = ({ value }) => {
@@ -91,6 +97,7 @@ class UnitSuggestions extends React.Component {
 
 UnitSuggestions.propTypes = {
   selectUnit: PropTypes.func.isRequired,
+  selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default UnitSuggestions;

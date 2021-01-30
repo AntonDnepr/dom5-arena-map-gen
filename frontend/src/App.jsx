@@ -68,7 +68,7 @@ NextStepButton1.propTypes = {
   setCurrentStep: PropTypes.func.isRequired,
 };
 
-const Step2 = ({ selectedNation }) => (
+const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => (
   <>
     <Row>
       <Col>
@@ -77,8 +77,13 @@ const Step2 = ({ selectedNation }) => (
     </Row>
     <Row>
       <Col>
-        <p>Select commander</p>
-        <UnitSuggestions id="commander" selectUnit={() => null} />
+        {selectedCommanders.map((commander) => <p key={`${commander.dominion_id}`}>{commander.name}</p>)}
+      </Col>
+    </Row>
+    <Row>
+      <Col>
+        <p>Select commanders</p>
+        <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} />
       </Col>
       <Col>
         <p>Select units to add to that commander</p>
@@ -86,6 +91,12 @@ const Step2 = ({ selectedNation }) => (
     </Row>
   </>
 );
+
+Step2.propTypes = {
+  selectedNation: PropTypes.string.isRequired,
+  selectCommander: PropTypes.func.isRequired,
+  selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 const NextNationButton = ({ setNationIndex, nationIndex }) => (
   <Row>
@@ -100,10 +111,6 @@ NextNationButton.propTypes = {
   nationIndex: PropTypes.number.isRequired,
 };
 
-Step2.propTypes = {
-  selectedNation: PropTypes.string.isRequired,
-};
-
 function App() {
   const [nations, setNations] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -114,6 +121,7 @@ function App() {
   const [selectedLandNation2, selectLandNation2] = useState('');
   const [selectedWaterNation1, selectWaterNation1] = useState('');
   const [selectedWaterNation2, selectWaterNation2] = useState('');
+  const [selectedCommanders, addCommander] = useState([]);
 
   useEffect(() => {
     if (nations.length < 1 && !isLoading) {
@@ -156,7 +164,11 @@ function App() {
       )}
       {currentStep === 'step2' && (
         <>
-          <Step2 selectedNation={nationForStep2} />
+          <Step2
+            selectedNation={nationForStep2}
+            selectCommander={addCommander}
+            selectedCommanders={selectedCommanders}
+          />
           {showNextNation
           && (
           <NextNationButton
