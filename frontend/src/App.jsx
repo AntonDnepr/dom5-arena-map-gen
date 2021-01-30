@@ -1,7 +1,7 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-  Container, Row, Col, Button,
+  Container, Row, Col, Button, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -69,6 +69,83 @@ NextStepButton1.propTypes = {
   setCurrentStep: PropTypes.func.isRequired,
 };
 
+const EditMagic = ({ uuid, saveMagicEdit }) => {
+  <Row>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>F</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>A</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>W</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>E</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>S</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>D</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>N</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>B</InputGroupText>
+        </InputGroupAddon>
+        <Input />
+      </InputGroup>
+    </Col>
+    <Col>
+      <Button onClick={() => { saveMagicEdit(uuid); }} />
+    </Col>
+  </Row>;
+};
+
+EditMagic.propTypes = {
+  uuid: PropTypes.string.isRequired,
+  saveMagicEdit: PropTypes.func.isRequired,
+};
+
 const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
   const deleteRow = (uuid, arrayToFilter) => {
     const newSelection = arrayToFilter.filter((obj) => obj.id !== uuid);
@@ -97,6 +174,8 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
               {commander.dominion_id}
               )
               {commander.name}
+              {' '}
+              <Button color="secondary" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Edit Magic</Button>
               {' '}
               <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
               {' '}
