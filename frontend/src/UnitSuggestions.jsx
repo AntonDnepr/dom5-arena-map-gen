@@ -9,7 +9,6 @@ const getUnitSuggestions = (value) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   if (inputLength >= 3) {
-    // setLoading(true);
     return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`)
       .then((response) => response.data);
   }

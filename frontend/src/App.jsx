@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import NationSuggestions from './NationSuggestions';
 import UnitSuggestions from './UnitSuggestions';
+import uuidv4 from './utils';
 
 const Step1 = ({
   nations, isLoading, selectLandNations, selectWaterNations,
@@ -74,6 +75,13 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
     selectCommander(newSelection);
   };
 
+  const duplicateRow = (uuid, arrayToFilter) => {
+    const unitToDuplicate = arrayToFilter.find((obj) => obj.id === uuid);
+    const copyOfUnit = { ...unitToDuplicate, id: uuidv4() };
+    const newSelection = [...arrayToFilter, copyOfUnit];
+    selectCommander(newSelection);
+  };
+
   return (
     <>
       <Row>
@@ -90,7 +98,7 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
               )
               {commander.name}
               {' '}
-              <Button color="info">Duplicate</Button>
+              <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
               {' '}
               <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
             </p>
