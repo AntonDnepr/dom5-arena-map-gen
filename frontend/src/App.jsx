@@ -136,7 +136,7 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
       </InputGroup>
     </Col>
     <Col>
-      <Button onClick={() => { saveMagicEdit(uuid); }} />
+      <Button onClick={() => { saveMagicEdit(uuid); }}>Save</Button>
     </Col>
   </Row>
 );
