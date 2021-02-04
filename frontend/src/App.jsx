@@ -69,7 +69,7 @@ NextStepButton1.propTypes = {
   setCurrentStep: PropTypes.func.isRequired,
 };
 
-const EditMagic = ({ uuid, saveMagicEdit }) => {
+const EditMagic = ({ uuid, saveMagicEdit }) => (
   <Row>
     <Col>
       <InputGroup size="sm">
@@ -138,12 +138,43 @@ const EditMagic = ({ uuid, saveMagicEdit }) => {
     <Col>
       <Button onClick={() => { saveMagicEdit(uuid); }} />
     </Col>
-  </Row>;
-};
-
+  </Row>
+);
 EditMagic.propTypes = {
   uuid: PropTypes.string.isRequired,
   saveMagicEdit: PropTypes.func.isRequired,
+};
+
+const CommanderRow = ({
+  commander, selectedCommanders, duplicateRow, deleteRow,
+}) => {
+  const [showEditMagic, setshowEditMagic] = React.useState(false);
+  const onClick = (param) => setshowEditMagic(!param);
+
+  return (
+    <div>
+      (
+      {commander.dominion_id}
+      )
+      {commander.name}
+      {' '}
+      <Button color="secondary" onClick={() => onClick(showEditMagic)}>Edit Magic</Button>
+      {' '}
+      <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
+      {' '}
+      <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
+      { showEditMagic ? <EditMagic uuid={commander.id} saveMagicEdit={() => {}} /> : null }
+    </div>
+  );
+};
+
+CommanderRow.propTypes = {
+  commander: PropTypes.shape(
+    { dominion_id: PropTypes.number, name: PropTypes.string, id: PropTypes.string },
+  ).isRequired,
+  selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  duplicateRow: PropTypes.func.isRequired,
+  deleteRow: PropTypes.func.isRequired,
 };
 
 const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
@@ -169,18 +200,13 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
       <Row>
         <Col>
           {selectedCommanders.map((commander) => (
-            <p key={`${commander.id}`}>
-              (
-              {commander.dominion_id}
-              )
-              {commander.name}
-              {' '}
-              <Button color="secondary" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Edit Magic</Button>
-              {' '}
-              <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
-              {' '}
-              <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
-            </p>
+            <CommanderRow
+              key={`${commander.id}`}
+              commander={commander}
+              selectedCommanders={selectedCommanders}
+              duplicateRow={duplicateRow}
+              deleteRow={deleteRow}
+            />
           ))}
         </Col>
       </Row>
