@@ -69,14 +69,17 @@ NextStepButton1.propTypes = {
   setCurrentStep: PropTypes.func.isRequired,
 };
 
-const EditMagic = ({ uuid, saveMagicEdit }) => (
+const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
   <Row>
     <Col>
       <InputGroup size="sm">
         <InputGroupAddon addonType="prepend">
           <InputGroupText>F</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, fire: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -84,7 +87,10 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>A</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, air: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -92,7 +98,10 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>W</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, water: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -100,7 +109,10 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>E</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, earth: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -108,7 +120,10 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>S</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, astral: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -116,7 +131,10 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>D</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, death: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -124,7 +142,10 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>N</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, nature: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
@@ -132,25 +153,29 @@ const EditMagic = ({ uuid, saveMagicEdit }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>B</InputGroupText>
         </InputGroupAddon>
-        <Input />
+        <Input onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, blood: e.target.value }); }
+          }
+        />
       </InputGroup>
     </Col>
     <Col>
-      <Button onClick={() => { saveMagicEdit(uuid); }}>Save</Button>
+      <Button onClick={() => saveMagicEdit()}>Save</Button>
     </Col>
   </Row>
 );
 EditMagic.propTypes = {
-  uuid: PropTypes.string.isRequired,
   saveMagicEdit: PropTypes.func.isRequired,
+  setCommanderMagic: PropTypes.func.isRequired,
+  commanderMagic: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 const CommanderRow = ({
-  commander, selectedCommanders, duplicateRow, deleteRow,
+  commander, selectedCommanders, duplicateRow, deleteRow, saveMagicEdit,
 }) => {
   const [showEditMagic, setshowEditMagic] = React.useState(false);
   const onClick = (param) => setshowEditMagic(!param);
-
+  const [commanderMagic, setCommanderMagic] = useState({});
   return (
     <div>
       (
@@ -163,7 +188,13 @@ const CommanderRow = ({
       <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
       {' '}
       <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
-      { showEditMagic ? <EditMagic uuid={commander.id} saveMagicEdit={() => {}} /> : null }
+      { showEditMagic ? (
+        <EditMagic
+          saveMagicEdit={() => saveMagicEdit(commander.id, selectedCommanders, commanderMagic)}
+          setCommanderMagic={setCommanderMagic}
+          commanderMagic={commanderMagic}
+        />
+      ) : null }
     </div>
   );
 };
@@ -175,6 +206,7 @@ CommanderRow.propTypes = {
   selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
   duplicateRow: PropTypes.func.isRequired,
   deleteRow: PropTypes.func.isRequired,
+  saveMagicEdit: PropTypes.func.isRequired,
 };
 
 const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
@@ -193,7 +225,9 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
   const saveMagicEdit = (uuid, arrayToFilter, newMagic) => {
     const unitToDuplicate = arrayToFilter.find((obj) => obj.id === uuid);
     const copyOfUnit = { ...unitToDuplicate, magic: newMagic };
-    const newSelection = [...arrayToFilter, copyOfUnit];
+    const foundIndex = arrayToFilter.findIndex((obj) => obj.id === uuid);
+    const newSelection = [...arrayToFilter];
+    newSelection[foundIndex] = copyOfUnit;
     selectCommander(newSelection);
   };
 
@@ -213,6 +247,7 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
               selectedCommanders={selectedCommanders}
               duplicateRow={duplicateRow}
               deleteRow={deleteRow}
+              saveMagicEdit={saveMagicEdit}
             />
           ))}
         </Col>
