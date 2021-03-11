@@ -190,6 +190,13 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
     selectCommander(newSelection);
   };
 
+  const saveMagicEdit = (uuid, arrayToFilter, newMagic) => {
+    const unitToDuplicate = arrayToFilter.find((obj) => obj.id === uuid);
+    const copyOfUnit = { ...unitToDuplicate, magic: newMagic };
+    const newSelection = [...arrayToFilter, copyOfUnit];
+    selectCommander(newSelection);
+  };
+
   return (
     <>
       <Row>
