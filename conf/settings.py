@@ -1,6 +1,5 @@
 import os
 import sys
-from datetime import timedelta
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -146,7 +145,6 @@ INSTALLED_APPS = [
     "drf_yasg",
     "anymail",
     "rest_framework",
-    "rest_auth",
     "django_rq",
     "apps.core",
     "apps.domdata",
@@ -240,36 +238,8 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=60 * 60 * 12),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
-    "AUTH_TOKEN_CLASSES": ("apps.users.tokens.CustomAccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "JTI_CLAIM": "jti",
-    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-}
-
-
-REST_AUTH_SERIALIZERS = {
-    "PASSWORD_RESET_SERIALIZER": (
-        "apps.users.serializers.CustomPasswordResetSerializer"
-    )
-}
 
 ########################################################################################
 #                                                                                      #
