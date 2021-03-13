@@ -5,12 +5,27 @@ import Autosuggest from 'react-autosuggest';
 import PropTypes from 'prop-types';
 import uuidv4 from './utils';
 
+const { CancelToken } = axios;
+let cancelToken;
+
 const getUnitSuggestions = (value) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   if (inputLength > 1) {
-    return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`)
-      .then((response) => response.data);
+    // Check if there are any previous pending requests
+    if (typeof cancelToken !== typeof undefined) {
+      cancelToken.cancel('Operation canceled due to new request.');
+    }
+
+    // Save the cancel token for the current request
+    cancelToken = CancelToken.source();
+    try {
+      return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`, {
+        cancelToken: cancelToken.token,
+      }).then((response) => response.data);
+    } catch (e) {
+      console.log('Request failed', e.message);
+    }
   }
   return [];
 };
