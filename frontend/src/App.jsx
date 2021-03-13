@@ -76,9 +76,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>F</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, fire: e.target.value }); }
           }
+          value={commanderMagic.fire || ''}
         />
       </InputGroup>
     </Col>
@@ -87,9 +89,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>A</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, air: e.target.value }); }
           }
+          value={commanderMagic.air || ''}
         />
       </InputGroup>
     </Col>
@@ -98,9 +102,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>W</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, water: e.target.value }); }
           }
+          value={commanderMagic.water || ''}
         />
       </InputGroup>
     </Col>
@@ -109,9 +115,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>E</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, earth: e.target.value }); }
           }
+          value={commanderMagic.earth || ''}
         />
       </InputGroup>
     </Col>
@@ -120,9 +128,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>S</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, astral: e.target.value }); }
           }
+          value={commanderMagic.astral || ''}
         />
       </InputGroup>
     </Col>
@@ -131,9 +141,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>D</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, death: e.target.value }); }
           }
+          value={commanderMagic.death || ''}
         />
       </InputGroup>
     </Col>
@@ -142,9 +154,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>N</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, nature: e.target.value }); }
           }
+          value={commanderMagic.nature || ''}
         />
       </InputGroup>
     </Col>
@@ -153,9 +167,11 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
         <InputGroupAddon addonType="prepend">
           <InputGroupText>B</InputGroupText>
         </InputGroupAddon>
-        <Input onChange={
+        <Input
+          onChange={
           (e) => { setCommanderMagic({ ...commanderMagic, blood: e.target.value }); }
           }
+          value={commanderMagic.blood || ''}
         />
       </InputGroup>
     </Col>
@@ -190,7 +206,10 @@ const CommanderRow = ({
       <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
       { showEditMagic ? (
         <EditMagic
-          saveMagicEdit={() => saveMagicEdit(commander.id, selectedCommanders, commanderMagic)}
+          saveMagicEdit={() => {
+            saveMagicEdit(commander.id, selectedCommanders, commanderMagic);
+            setshowEditMagic(false);
+          }}
           setCommanderMagic={setCommanderMagic}
           commanderMagic={commanderMagic}
         />
