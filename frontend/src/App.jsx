@@ -230,21 +230,29 @@ CommanderRow.propTypes = {
 
 const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
   const deleteRow = (uuid, arrayToFilter) => {
-    const newSelection = arrayToFilter.filter((obj) => obj.id !== uuid);
+    const newSelection = arrayToFilter.filter(
+      (obj) => obj.id !== uuid && obj.for_nation === selectedNation,
+    );
     selectCommander(newSelection);
   };
 
   const duplicateRow = (uuid, arrayToFilter) => {
-    const unitToDuplicate = arrayToFilter.find((obj) => obj.id === uuid);
+    const unitToDuplicate = arrayToFilter.find(
+      (obj) => obj.id === uuid && obj.for_nation === selectedNation,
+    );
     const copyOfUnit = { ...unitToDuplicate, id: uuidv4() };
     const newSelection = [...arrayToFilter, copyOfUnit];
     selectCommander(newSelection);
   };
 
   const saveMagicEdit = (uuid, arrayToFilter, newMagic) => {
-    const unitToDuplicate = arrayToFilter.find((obj) => obj.id === uuid);
+    const unitToDuplicate = arrayToFilter.find(
+      (obj) => obj.id === uuid && obj.for_nation === selectedNation,
+    );
     const copyOfUnit = { ...unitToDuplicate, magic: newMagic };
-    const foundIndex = arrayToFilter.findIndex((obj) => obj.id === uuid);
+    const foundIndex = arrayToFilter.findIndex(
+      (obj) => obj.id === uuid && obj.for_nation === selectedNation,
+    );
     const newSelection = [...arrayToFilter];
     newSelection[foundIndex] = copyOfUnit;
     selectCommander(newSelection);
@@ -259,7 +267,9 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
       </Row>
       <Row>
         <Col>
-          {selectedCommanders.map((commander) => (
+          {selectedCommanders.filter(
+            (obj) => obj.for_nation === selectedNation,
+          ).map((commander) => (
             <CommanderRow
               key={`${commander.id}`}
               commander={commander}
@@ -274,7 +284,7 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
       <Row>
         <Col>
           <p>Select commanders</p>
-          <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} />
+          <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} selectedNation={selectedNation} />
         </Col>
         <Col>
           <p>Select units to add to the commanders</p>

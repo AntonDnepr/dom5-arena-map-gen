@@ -42,12 +42,13 @@ class UnitSuggestions extends React.Component {
     }
 
     onSuggestionSelected = (event, { suggestionValue }) => {
-      const { selectUnit, selectedUnits } = this.props;
+      const { selectUnit, selectedUnits, selectedNation } = this.props;
       const splittedString = suggestionValue.split('/');
       const generatedObject = {
         dominion_id: splittedString[0],
         name: splittedString[1],
         id: uuidv4(),
+        for_nation: selectedNation,
       };
       const newSelected = [...selectedUnits, generatedObject];
       selectUnit(newSelected);
@@ -102,6 +103,7 @@ class UnitSuggestions extends React.Component {
 UnitSuggestions.propTypes = {
   selectUnit: PropTypes.func.isRequired,
   selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedNation: PropTypes.string.isRequired,
 };
 
 export default UnitSuggestions;
