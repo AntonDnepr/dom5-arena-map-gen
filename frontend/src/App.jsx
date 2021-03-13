@@ -228,7 +228,9 @@ CommanderRow.propTypes = {
   saveMagicEdit: PropTypes.func.isRequired,
 };
 
-const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
+const Step2 = ({
+  selectedNation, selectCommander, selectedCommanders, selectedUnits, selectUnit,
+}) => {
   const deleteRow = (uuid, arrayToFilter) => {
     const newSelection = arrayToFilter.filter(
       (obj) => obj.id !== uuid && obj.for_nation === selectedNation,
@@ -280,6 +282,18 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
             />
           ))}
         </Col>
+        <Col>
+          {selectedUnits.filter(
+            (obj) => obj.for_nation === selectedNation,
+          ).map((unit) => (
+            <p>
+              (
+              {unit.dominion_id}
+              )
+              {unit.name}
+            </p>
+          ))}
+        </Col>
       </Row>
       <Row>
         <Col>
@@ -288,6 +302,7 @@ const Step2 = ({ selectedNation, selectCommander, selectedCommanders }) => {
         </Col>
         <Col>
           <p>Select units to add to the commanders</p>
+          <UnitSuggestions id="unit" selectUnit={selectUnit} selectedUnits={selectedUnits} selectedNation={selectedNation} />
         </Col>
       </Row>
     </>
@@ -298,6 +313,8 @@ Step2.propTypes = {
   selectedNation: PropTypes.string.isRequired,
   selectCommander: PropTypes.func.isRequired,
   selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectUnit: PropTypes.func.isRequired,
 };
 
 const NextNationButton = ({ setNationIndex, nationIndex }) => (
@@ -324,6 +341,7 @@ function App() {
   const [selectedWaterNation1, selectWaterNation1] = useState('');
   const [selectedWaterNation2, selectWaterNation2] = useState('');
   const [selectedCommanders, addCommander] = useState([]);
+  const [selectedUnits, addUnit] = useState([]);
 
   useEffect(() => {
     if (nations.length < 1 && !isLoading) {
@@ -370,6 +388,8 @@ function App() {
             selectedNation={nationForStep2}
             selectCommander={addCommander}
             selectedCommanders={selectedCommanders}
+            selectedUnits={selectedUnits}
+            selectUnit={addUnit}
           />
           {showNextNation
           && (

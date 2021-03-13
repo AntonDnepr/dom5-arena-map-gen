@@ -60,7 +60,7 @@ class UnitSuggestions extends React.Component {
     onSuggestionsFetchRequested = ({ value }) => {
       const inputValue = value.trim().toLowerCase();
       const inputLength = inputValue.length;
-      if (inputLength >= 3) {
+      if (inputLength > 1) {
         getUnitSuggestions(value).then((suggestions) => {
           this.setState({
             suggestions,
