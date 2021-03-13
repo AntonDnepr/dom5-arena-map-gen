@@ -8,7 +8,7 @@ import uuidv4 from './utils';
 const getUnitSuggestions = (value) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  if (inputLength >= 3) {
+  if (inputLength > 1) {
     return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`)
       .then((response) => response.data);
   }
