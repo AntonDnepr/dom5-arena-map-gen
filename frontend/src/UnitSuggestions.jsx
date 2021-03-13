@@ -49,6 +49,7 @@ class UnitSuggestions extends React.Component {
         name: splittedString[1],
         id: uuidv4(),
         for_nation: selectedNation,
+        quantity: 1,
       };
       const newSelected = [...selectedUnits, generatedObject];
       selectUnit(newSelected);

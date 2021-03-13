@@ -228,12 +228,57 @@ CommanderRow.propTypes = {
   saveMagicEdit: PropTypes.func.isRequired,
 };
 
+const UnitRow = ({
+  unit, selectedUnits, duplicateRow, deleteRow, saveUnitQuantity,
+}) => (
+  <Row>
+    <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>
+            (
+            {unit.dominion_id}
+            )
+            {unit.name}
+          </InputGroupText>
+        </InputGroupAddon>
+        <Input
+          onChange={
+          (e) => { saveUnitQuantity(unit.id, selectedUnits, e.target.value); }
+          }
+          value={unit.quantity}
+        />
+      </InputGroup>
+    </Col>
+    <Col>
+      <Button color="info" onClick={() => duplicateRow(unit.id, selectedUnits)}>Duplicate</Button>
+      {' '}
+      <Button color="danger" onClick={() => deleteRow(unit.id, selectedUnits)}>Delete</Button>
+    </Col>
+  </Row>
+);
+
+UnitRow.propTypes = {
+  unit: PropTypes.shape(
+    {
+      dominion_id: PropTypes.number,
+      name: PropTypes.string,
+      id: PropTypes.string,
+      quantity: PropTypes.number,
+    },
+  ).isRequired,
+  selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  duplicateRow: PropTypes.func.isRequired,
+  deleteRow: PropTypes.func.isRequired,
+  saveUnitQuantity: PropTypes.func.isRequired,
+};
+
 const Step2 = ({
   selectedNation, selectCommander, selectedCommanders, selectedUnits, selectUnit,
 }) => {
   const deleteRow = (uuid, arrayToFilter) => {
     const newSelection = arrayToFilter.filter(
-      (obj) => obj.id !== uuid && obj.for_nation === selectedNation,
+      (obj) => obj.id !== uuid,
     );
     selectCommander(newSelection);
   };
@@ -258,6 +303,35 @@ const Step2 = ({
     const newSelection = [...arrayToFilter];
     newSelection[foundIndex] = copyOfUnit;
     selectCommander(newSelection);
+  };
+
+  const deleteUnitRow = (uuid, arrayToFilter) => {
+    const newSelection = arrayToFilter.filter(
+      (obj) => obj.id !== uuid,
+    );
+    selectUnit(newSelection);
+  };
+
+  const duplicateUnitRow = (uuid, arrayToFilter) => {
+    const unitToDuplicate = arrayToFilter.find(
+      (obj) => obj.id === uuid && obj.for_nation === selectedNation,
+    );
+    const copyOfUnit = { ...unitToDuplicate, id: uuidv4() };
+    const newSelection = [...arrayToFilter, copyOfUnit];
+    selectUnit(newSelection);
+  };
+
+  const saveUnitQuantity = (uuid, arrayToFilter, newQuantity) => {
+    const unitToDuplicate = arrayToFilter.find(
+      (obj) => obj.id === uuid && obj.for_nation === selectedNation,
+    );
+    const copyOfUnit = { ...unitToDuplicate, quantity: newQuantity };
+    const foundIndex = arrayToFilter.findIndex(
+      (obj) => obj.id === uuid && obj.for_nation === selectedNation,
+    );
+    const newSelection = [...arrayToFilter];
+    newSelection[foundIndex] = copyOfUnit;
+    selectUnit(newSelection);
   };
 
   return (
@@ -286,12 +360,14 @@ const Step2 = ({
           {selectedUnits.filter(
             (obj) => obj.for_nation === selectedNation,
           ).map((unit) => (
-            <p>
-              (
-              {unit.dominion_id}
-              )
-              {unit.name}
-            </p>
+            <UnitRow
+              key={`${unit.id}`}
+              unit={unit}
+              selectedUnits={selectedUnits}
+              duplicateRow={duplicateUnitRow}
+              deleteRow={deleteUnitRow}
+              saveUnitQuantity={saveUnitQuantity}
+            />
           ))}
         </Col>
       </Row>
