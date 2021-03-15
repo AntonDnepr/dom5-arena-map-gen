@@ -19,13 +19,12 @@ const getUnitSuggestions = (value) => {
 
     // Save the cancel token for the current request
     cancelToken = CancelToken.source();
-    try {
-      return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`, {
-        cancelToken: cancelToken.token,
-      }).then((response) => response.data);
-    } catch (e) {
-      console.log('Request failed', e.message);
-    }
+    return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`, {
+      cancelToken: cancelToken.token,
+    }).then((response) => response.data).catch((error) => {
+      console.log('Error', error);
+      return [];
+    });
   }
   return [];
 };
@@ -81,6 +80,8 @@ class UnitSuggestions extends React.Component {
           this.setState({
             suggestions,
           });
+        }).catch((error) => {
+          console.log('AutosuggestError', error);
         });
       }
     };

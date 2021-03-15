@@ -220,7 +220,7 @@ const CommanderRow = ({
 
 CommanderRow.propTypes = {
   commander: PropTypes.shape(
-    { dominion_id: PropTypes.number, name: PropTypes.string, id: PropTypes.string },
+    { dominion_id: PropTypes.string, name: PropTypes.string, id: PropTypes.string },
   ).isRequired,
   selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
   duplicateRow: PropTypes.func.isRequired,
@@ -261,10 +261,10 @@ const UnitRow = ({
 UnitRow.propTypes = {
   unit: PropTypes.shape(
     {
-      dominion_id: PropTypes.number,
+      dominion_id: PropTypes.string,
       name: PropTypes.string,
       id: PropTypes.string,
-      quantity: PropTypes.number,
+      quantity: PropTypes.string,
     },
   ).isRequired,
   selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -406,6 +406,18 @@ NextNationButton.propTypes = {
   nationIndex: PropTypes.number.isRequired,
 };
 
+const GenerateMapButton = ({ setGenerateMapRequest }) => (
+  <Row>
+    <Col>
+      <Button onClick={() => setGenerateMapRequest()}>Generate map</Button>
+    </Col>
+  </Row>
+);
+
+GenerateMapButton.propTypes = {
+  setGenerateMapRequest: PropTypes.func.isRequired,
+};
+
 function App() {
   const [nations, setNations] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -442,6 +454,17 @@ function App() {
       setNationForStep2(selectedNation);
     }
   }
+  const setGenerateMapRequest = () => {
+    const objectToPost = {
+      selectedLandNation1,
+      selectedLandNation2,
+      selectedWaterNation1,
+      selectedWaterNation2,
+      selectedCommanders,
+      selectedUnits,
+    };
+    console.log(objectToPost);
+  };
 
   return (
     <Container>
@@ -474,6 +497,7 @@ function App() {
             nationIndex={nationIndex}
           />
           )}
+          {!showNextNation && <GenerateMapButton setGenerateMapRequest={setGenerateMapRequest} />}
         </>
       )}
     </Container>
