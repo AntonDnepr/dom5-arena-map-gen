@@ -1,4 +1,5 @@
 from rest_framework import filters
+from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 
 from apps.core.serializers import NationSerializer, UnitSerializer
@@ -17,3 +18,8 @@ class AutocompleteNationsView(ListAPIView):
     serializer_class = NationSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["dominion_id", "name"]
+
+
+@api_view(["POST"])
+def generate_map(request):
+    ...

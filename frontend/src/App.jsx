@@ -456,12 +456,12 @@ function App() {
   }
   const setGenerateMapRequest = () => {
     const objectToPost = {
-      selectedLandNation1,
-      selectedLandNation2,
-      selectedWaterNation1,
-      selectedWaterNation2,
-      selectedCommanders,
-      selectedUnits,
+      land_nation_1: selectedLandNation1,
+      land_nation_2: selectedLandNation2,
+      water_nation_1: selectedWaterNation1,
+      water_nation_2: selectedWaterNation2,
+      commanders: selectedCommanders,
+      units: selectedUnits,
     };
     console.log(objectToPost);
   };
