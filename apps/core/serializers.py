@@ -25,7 +25,18 @@ def nation_exists(value):
     nation = nation.strip()
     eras = {"EA": 1, "MA": 2, "LA": 3}
     if not Nation.objects.filter(era=eras[age], name=nation).exists():
-        raise serializers.ValidationError("There is no such nation")
+        raise serializers.ValidationError(
+            "There is no such nation with name {} in {}".format(nation, age)
+        )
+
+
+def unit_exists(value):
+    for instance in value:
+        dominion_id = instance["dominion_id"]
+        if not Unit.objects.filter(dominion_id=dominion_id).exists():
+            raise serializers.ValidationError(
+                "There is no such unit with dominion_id {}".format(dominion_id)
+            )
 
 
 class GenerateMapSerializer(serializers.Serializer):
@@ -41,5 +52,5 @@ class GenerateMapSerializer(serializers.Serializer):
     water_nation_2 = serializers.CharField(
         required=False, validators=[nation_exists], allow_blank=True
     )
-    commanders = serializers.ListField(required=False)
-    units = serializers.ListField(required=False)
+    commanders = serializers.ListField(required=False, validators=[unit_exists])
+    units = serializers.ListField(required=False, validators=[unit_exists])
