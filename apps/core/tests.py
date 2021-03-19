@@ -68,8 +68,8 @@ def test_autocomplete_nations_search_by_partial_name(prepare_data, client):
 
 @pytest.fixture
 def data_for_mapgen():
-    nation1 = NationFactory(era=1, name="Tir na n'Og")
-    nation2 = NationFactory(era=1, name="T'ien Ch'i")
+    nation1 = NationFactory(era=1, name="Tir na n'Og", dominion_id=1)
+    nation2 = NationFactory(era=1, name="T'ien Ch'i", dominion_id=2)
     UnitFactory(dominion_id=1786)
     UnitFactory(dominion_id=7)
     UnitFactory(dominion_id=105)
@@ -145,3 +145,23 @@ def test_generate_map_serializer_invalid_unit(data_for_mapgen):
     Unit.objects.filter(dominion_id=1786).delete()
     serializer = GenerateMapSerializer(data=data)
     assert not serializer.is_valid()
+
+
+def test_generate_map_serializer_processed_data(data_for_mapgen):
+    data, nation1, nation2 = data_for_mapgen
+    serializer = GenerateMapSerializer(data=data)
+    assert serializer.is_valid()
+    returned_data = serializer.process_data(serializer.validated_data)
+    assert returned_data == [
+        {
+            nation1.dominion_id: [
+                {
+                    "1786": {
+                        "magic": {"mag_fire": "2", "mag_blood": "2"},
+                        "units": [{"105": "10"}],
+                    }
+                }
+            ]
+        },
+        {nation2.dominion_id: [{"7": {"units": [{"408": "10"}]}}]},
+    ]
