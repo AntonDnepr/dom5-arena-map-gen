@@ -165,3 +165,37 @@ def test_generate_map_serializer_processed_data(data_for_mapgen):
         },
         {nation2.dominion_id: [{"7": {"units": [{"408": "10"}]}}]},
     ]
+
+
+def test_mapgenerator_function(data_for_mapgen):
+    data, nation1, nation2 = data_for_mapgen
+    serializer = GenerateMapSerializer(data=data)
+    assert serializer.is_valid()
+    returned_data = serializer.process_data(serializer.validated_data)
+    mapgenerated_text = serializer.data_into_map(returned_data)
+    assert len(mapgenerated_text) == 2
+    assert mapgenerated_text[0] == (
+        """
+        #allowedplayer {0}
+        #specstart {0} 5
+        #setland 5
+        #commander 1786
+        #clearmagic
+        #mag_fire 2
+        #mag_blood 2
+        #units 10 105
+        """.format(
+            nation1.dominion_id
+        )
+    )
+    assert mapgenerated_text[1] == (
+        """
+        #allowedplayer {0}
+        #specstart {0} 8
+        #setland 8
+        #commander 7
+        #units 10 408
+        """.format(
+            nation2.dominion_id
+        )
+    )
