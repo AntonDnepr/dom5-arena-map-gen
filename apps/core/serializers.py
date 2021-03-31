@@ -104,8 +104,32 @@ class GenerateMapSerializer(serializers.Serializer):
                 commander_to_append = nation_dict[dominion_id][commander_index]
                 commander_id = list(commander_to_append)[0]
                 commander_to_append[commander_id]["units"].append(
-                    {unit["dominion_id"]: unit["quantity"]}
+                    (unit["dominion_id"], unit["quantity"])
                 )
             returned_data.append(nation_dict)
-        returned_data.sort(key=lambda x: sum(list(x)))
+        return returned_data
+
+    def data_into_map(self, data):
+        order_to_map_position = [5, 8]
+        returned_data = []
+        for index, nation_data in enumerate(data):
+            nation_id = list(nation_data.keys())[0]
+            position_on_map = order_to_map_position[index]
+            final_string = "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}".format(
+                nation_id, position_on_map
+            )
+            for commander in nation_data[nation_id]:
+                for commander_id, commander_data in commander.items():
+                    commander_string = "\n#commander {0}".format(commander_id)
+                    for units_data in commander_data.get("units", []):
+                        unit_id, amount = units_data
+                        commander_string += "\n#units {0} {1}".format(amount, unit_id)
+                    magic = commander_data.get("magic")
+                    if magic:
+                        magic_string = "\n#clearmagic"
+                        for key, value in magic.items():
+                            magic_string += "\n#{0} {1}".format(key, value)
+                        commander_string += magic_string
+                    final_string += commander_string
+            returned_data.append(final_string)
         return returned_data

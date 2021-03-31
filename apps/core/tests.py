@@ -158,12 +158,12 @@ def test_generate_map_serializer_processed_data(data_for_mapgen):
                 {
                     "1786": {
                         "magic": {"mag_fire": "2", "mag_blood": "2"},
-                        "units": [{"105": "10"}],
+                        "units": [("105", "10")],
                     }
                 }
             ]
         },
-        {nation2.dominion_id: [{"7": {"units": [{"408": "10"}]}}]},
+        {nation2.dominion_id: [{"7": {"units": [("408", "10")]}}]},
     ]
 
 
@@ -175,27 +175,22 @@ def test_mapgenerator_function(data_for_mapgen):
     mapgenerated_text = serializer.data_into_map(returned_data)
     assert len(mapgenerated_text) == 2
     assert mapgenerated_text[0] == (
-        """
-        #allowedplayer {0}
-        #specstart {0} 5
-        #setland 5
-        #commander 1786
-        #clearmagic
-        #mag_fire 2
-        #mag_blood 2
-        #units 10 105
-        """.format(
-            nation1.dominion_id
-        )
+        (
+            "\n#allowedplayer {0}\n#specstart {0} 5\n#setland 5\n#commander 1786\n"
+            "#units 10 105\n#clearmagic\n#mag_fire 2\n#mag_blood 2"
+        ).format(nation1.dominion_id)
     )
     assert mapgenerated_text[1] == (
-        """
-        #allowedplayer {0}
-        #specstart {0} 8
-        #setland 8
-        #commander 7
-        #units 10 408
-        """.format(
-            nation2.dominion_id
-        )
+        (
+            "\n#allowedplayer {0}\n#specstart {0} 8\n#setland 8"
+            "\n#commander 7\n#units 10 408"
+        ).format(nation2.dominion_id)
     )
+
+
+def test_generate_map_serializer_processed_data_with_water_nation():
+    ...
+
+
+def test_mapgenerator_function_with_water_nation():
+    ...
