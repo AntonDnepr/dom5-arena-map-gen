@@ -418,9 +418,25 @@ GenerateMapButton.propTypes = {
   setGenerateMapRequest: PropTypes.func.isRequired,
 };
 
+const FinalMapComponent = ({ finalMapData }) => (
+  <Row>
+    <Col>
+      <p>Copy the text below into your Arena.map file</p>
+      <div style={{ whiteSpace: 'pre-line' }}>
+        {finalMapData}
+      </div>
+    </Col>
+  </Row>
+);
+
+FinalMapComponent.propTypes = {
+  finalMapData: PropTypes.string.isRequired,
+};
+
 function App() {
   const [nations, setNations] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [finalMapData, setfinalMapData] = useState('');
   const [currentStep, setCurrentStep] = useState('step1');
   const [nationForStep2, setNationForStep2] = useState('');
   const [nationIndex, setNationIndex] = useState(0);
@@ -467,7 +483,8 @@ function App() {
     axios.post('/api/v0/generate-map/', objectToPost)
       .then((response) => {
         setLoading(false);
-        console.log(response.data);
+        setfinalMapData(response.data);
+        setCurrentStep('final');
       });
   };
 
@@ -505,6 +522,7 @@ function App() {
           {!showNextNation && <GenerateMapButton setGenerateMapRequest={setGenerateMapRequest} />}
         </>
       )}
+      {currentStep === 'final' && <FinalMapComponent finalMapData={finalMapData} />}
     </Container>
   );
 }
