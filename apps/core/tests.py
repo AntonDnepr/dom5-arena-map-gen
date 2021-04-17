@@ -161,36 +161,121 @@ def test_generate_map_serializer_processed_data(data_for_mapgen):
                         "units": [("105", "10")],
                     }
                 }
-            ]
+            ],
+            "land_type": "land",
         },
-        {nation2.dominion_id: [{"7": {"units": [("408", "10")]}}]},
+        {nation2.dominion_id: [{"7": {"units": [("408", "10")]}}], "land_type": "land"},
     ]
 
 
 def test_mapgenerator_function(data_for_mapgen):
     data, nation1, nation2 = data_for_mapgen
     serializer = GenerateMapSerializer(data=data)
+    start1, start2 = GenerateMapSerializer.LAND_STARTS
     assert serializer.is_valid()
     returned_data = serializer.process_data(serializer.validated_data)
     mapgenerated_text = serializer.data_into_map(returned_data)
     assert len(mapgenerated_text) == 2
     assert mapgenerated_text[0] == (
         (
-            "\n#allowedplayer {0}\n#specstart {0} 5\n#setland 5\n#commander 1786\n"
+            "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}\n#commander 1786\n"
             "#units 10 105\n#clearmagic\n#mag_fire 2\n#mag_blood 2"
-        ).format(nation1.dominion_id)
+        ).format(nation1.dominion_id, start1)
     )
     assert mapgenerated_text[1] == (
         (
-            "\n#allowedplayer {0}\n#specstart {0} 8\n#setland 8"
+            "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}"
             "\n#commander 7\n#units 10 408"
-        ).format(nation2.dominion_id)
+        ).format(nation2.dominion_id, start2)
     )
 
 
-def test_generate_map_serializer_processed_data_with_water_nation():
-    ...
+@pytest.fixture
+def data_for_mapgen_uw():
+    nation3 = NationFactory(era=1, name="Oceania", dominion_id=3)
+    nation4 = NationFactory(era=1, name="Atlantis", dominion_id=4)
+    UnitFactory(dominion_id=1786)
+    UnitFactory(dominion_id=7)
+    UnitFactory(dominion_id=105)
+    UnitFactory(dominion_id=408)
+    return (
+        {
+            "land_nation_1": "",
+            "land_nation_2": "",
+            "water_nation_1": "(EA) Oceania",
+            "water_nation_2": "(EA) Atlantis",
+            "commanders": [
+                {
+                    "dominion_id": "7",
+                    "name": "Emerald Guard",
+                    "id": "02d84d0c-1cbd-41ed-98a6-b5949010155d",
+                    "for_nation": "(EA) Oceania",
+                    "quantity": "1",
+                },
+                {
+                    "dominion_id": "7",
+                    "name": "Emerald Guard",
+                    "id": "02d84d0c-1cbd-41ed-98a6-b5949010155d",
+                    "for_nation": "(EA) Atlantis",
+                    "quantity": "1",
+                },
+            ],
+            "units": [
+                {
+                    "dominion_id": "408",
+                    "name": "Water Elemental",
+                    "id": "23925abc-40c0-4feb-9dcd-4b13d4d336a5",
+                    "for_nation": "(EA) Oceania",
+                    "quantity": "10",
+                },
+                {
+                    "dominion_id": "408",
+                    "name": "Water Elemental",
+                    "id": "23925abc-40c0-4feb-9dcd-4b13d4d336a5",
+                    "for_nation": "(EA) Atlantis",
+                    "quantity": "10",
+                },
+            ],
+        },
+        nation3,
+        nation4,
+    )
 
 
-def test_mapgenerator_function_with_water_nation():
-    ...
+def test_generate_map_serializer_processed_data_with_water_nation(data_for_mapgen_uw):
+    data, nation3, nation4 = data_for_mapgen_uw
+    serializer = GenerateMapSerializer(data=data)
+    assert serializer.is_valid()
+    returned_data = serializer.process_data(serializer.validated_data)
+    assert returned_data == [
+        {
+            nation3.dominion_id: [{"7": {"units": [("408", "10")]}}],
+            "land_type": "water",
+        },
+        {
+            nation4.dominion_id: [{"7": {"units": [("408", "10")]}}],
+            "land_type": "water",
+        },
+    ]
+
+
+def test_mapgenerator_function_with_water_nation(data_for_mapgen_uw):
+    data, nation3, nation4 = data_for_mapgen_uw
+    serializer = GenerateMapSerializer(data=data)
+    start1, start2 = GenerateMapSerializer.WATER_STARTS
+    assert serializer.is_valid()
+    returned_data = serializer.process_data(serializer.validated_data)
+    mapgenerated_text = serializer.data_into_map(returned_data)
+    assert len(mapgenerated_text) == 2
+    assert mapgenerated_text[0] == (
+        (
+            "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}"
+            "\n#commander 7\n#units 10 408"
+        ).format(nation3.dominion_id, start1)
+    )
+    assert mapgenerated_text[1] == (
+        (
+            "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}"
+            "\n#commander 7\n#units 10 408"
+        ).format(nation4.dominion_id, start2)
+    )

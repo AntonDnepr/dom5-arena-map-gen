@@ -42,6 +42,7 @@ def unit_exists(value):
 
 
 class GenerateMapSerializer(serializers.Serializer):
+    LAND_STARTS, WATER_STARTS = (5, 8), (12, 14)
     land_nation_1 = serializers.CharField(
         required=False, validators=[nation_exists], allow_blank=True
     )
@@ -75,9 +76,10 @@ class GenerateMapSerializer(serializers.Serializer):
             data["water_nation_1"],
             data["water_nation_2"],
         ]
-        selected_nations = list(filter(lambda x: bool(x), nations_list))
         returned_data = []
-        for nation in selected_nations:
+        for index, nation in enumerate(nations_list):
+            if not bool(nation):
+                continue
             units = [x for x in data["units"] if x["for_nation"] == nation]
             commanders = [x for x in data["commanders"] if x["for_nation"] == nation]
             age, nation_name = nation.split(")")
@@ -86,7 +88,8 @@ class GenerateMapSerializer(serializers.Serializer):
             dominion_id = Nation.objects.get(
                 era=ERAS[age], name=nation_name
             ).dominion_id
-            nation_dict = {dominion_id: []}
+            land_type = "land" if index < 2 else "water"
+            nation_dict = {dominion_id: [], "land_type": land_type}
             for commander in commanders:
                 magic = commander.get("magic")
                 commander_data = {"units": []}
@@ -110,12 +113,15 @@ class GenerateMapSerializer(serializers.Serializer):
         return returned_data
 
     def data_into_map(self, data):
-        order_to_map_position = [5, 8]
+        order_to_map_position = {
+            "land": [self.LAND_STARTS[0], self.LAND_STARTS[1]],
+            "water": [self.WATER_STARTS[0], self.WATER_STARTS[1]],
+        }
         returned_data = []
         for index, nation_data in enumerate(data):
             nation_id = list(nation_data.keys())[0]
             position_on_map = order_to_map_position[index]
-            final_string = "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}".format(
+            f_string = "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}".format(
                 nation_id, position_on_map
             )
             for commander in nation_data[nation_id]:
@@ -130,6 +136,6 @@ class GenerateMapSerializer(serializers.Serializer):
                         for key, value in magic.items():
                             magic_string += "\n#{0} {1}".format(key, value)
                         commander_string += magic_string
-                    final_string += commander_string
-            returned_data.append(final_string)
+                    f_string += commander_string
+            returned_data.append(f_string)
         return returned_data
