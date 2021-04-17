@@ -35,19 +35,7 @@ You have to set or modify some variables in order to start the docker containers
     - DOCKER_REDIS_PORT
     - DOCKER_BACKEND_PORT
 
-3. Email settings variables:
-    We use a mailtrap for local development.
-    You can see the data for these variables at https://mailtrap.io/inboxes
-    (select one of the inboxes, go to the "Integrations" section, select "Django")
-
-    - EMAIL_HOST
-    - EMAIL_HOST_USER
-    - EMAIL_HOST_PASSWORD
-    - EMAIL_PORT
-    - MAILGUN_API_KEY
-    - MAILGUN_SENDER_DOMAIN
-
-4. Django settings:
+3. Django settings:
     - ENV - use "local" for local development
 
 All variables must be written without quotation marks and without spaces before and after the equal sign.
@@ -85,13 +73,3 @@ https://udacity.github.io/git-styleguide/
 To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 
 `docs: add changes to the Readme #123`
-
-## Documentation
-
-Please make sure that each public class, method and function has meaningful documentation which describes the purpose of the code.
-To make things easier to follow we use Python annotations to the public functions and method.
-Cheat sheet:
-https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html
-
-More info here:
-https://docs.python.org/3/library/typing.html

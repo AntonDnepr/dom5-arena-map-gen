@@ -11,11 +11,8 @@ psycopg2-binary = "*"                # Database connector (LGPL)
 gunicorn = "*"                       # Python WSGI HTTP Server
 django-cors-headers = "*"
 django-extensions = "*"             # Different helpers for Django REST Framework
-django-rq = "*"                     # Asynchronous tasks
-django-redis = "*"                  # Redis cache backend (BSD-3)
 drf-yasg = "*"
 argon2-cffi = "*"
-django-anymail = {extras = ["mailgun"],version = "*"}
 
 [dev-packages]
 ipdb = "*"                           # Debugging
@@ -27,8 +24,8 @@ pre-commit = "*"
 prospector = ">=1.1.6.4"
 Faker = "*"
 black = "==20.8b1"
-flake8 = "*"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
-autopep8 = "*"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
+flake8 = "==3.8.4"                     # Old version, because prospector stick with old deps of pyflake and pycodestyles
+autopep8 = "==1.5.5"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
 isort = "*"
 django-silk = "*"
 pytest = "*"                   # Better testing

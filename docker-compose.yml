@@ -22,19 +22,6 @@ services:
     ports:
       - "${DOCKER_POSTGRES_PORT}:5432"
 
-  redis:
-    build:
-      context: ./docker/redis/
-    restart: on-failure
-    container_name: ${PROJECT_NAME}_redis
-    image: ${PROJECT_NAME}_redis
-    volumes:
-      - redis_data:/data
-    networks:
-      - default_dom5
-    ports:
-      - "${DOCKER_REDIS_PORT}:6379"
-
   backend:
     build:
       dockerfile: ./docker/python/Dockerfile
@@ -68,43 +55,6 @@ services:
     ports:
       - "${DOCKER_BACKEND_PORT}:8000"
     working_dir: /usr/src/app
-    stdin_open: true
-    tty: true
-    depends_on:
-      - postgres
-      - redis
-
-  rqworkers:
-    build:
-      dockerfile: ./docker/python/Dockerfile
-      context: ./
-    restart: on-failure
-    container_name: ${PROJECT_NAME}_rqworkers
-    image: ${PROJECT_NAME}_rqworkers
-    environment:
-      - DJANGO_DEBUG=${DJANGO_DEBUG}
-      - APPEND_SLASH=True
-      - PREPEND_WWW=False
-      - ENV=local
-      - SECURE_SSL_REDIRECT=False
-      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5433/${PROJECT_NAME}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
-      - SESSION_COOKIE_SECURE=False
-      - ALLOWED_HOSTS=localhost,127.0.0.1
-      - CORS_ORIGIN_WHITELIST=localhost:8000,localhost:3005,127.0.0.1:3005,127.0.0.1:8000
-      - EMAIL_HOST=${EMAIL_HOST}
-      - EMAIL_PORT=${EMAIL_PORT}
-      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
-      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-      - RQ_HOST=redis
-      - RQ_PORT=${DOCKER_REDIS_PORT}
-    volumes:
-      - .:/usr/src/app
-    networks:
-      - default_dom5
-    working_dir: /usr/src/app
-    command: /bin/bash -c "PIPENV_DONT_LOAD_ENV=1 python manage.py rqworker email high default"
     stdin_open: true
     tty: true
     depends_on:
