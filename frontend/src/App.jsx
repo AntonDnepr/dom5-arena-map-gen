@@ -463,7 +463,12 @@ function App() {
       commanders: selectedCommanders,
       units: selectedUnits,
     };
-    console.log(objectToPost);
+    setLoading(true);
+    axios.post('/api/v0/generate-map/', objectToPost)
+      .then((response) => {
+        setLoading(false);
+        console.log(response.data);
+      });
   };
 
   return (
