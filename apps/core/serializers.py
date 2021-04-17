@@ -120,7 +120,13 @@ class GenerateMapSerializer(serializers.Serializer):
         returned_data = []
         for index, nation_data in enumerate(data):
             nation_id = list(nation_data.keys())[0]
-            position_on_map = order_to_map_position[index]
+            land_type = nation_data["land_type"]
+            final_index = index
+            if land_type == "water":
+                # This works even for only water and land + water combos, because
+                # python lists are supporting negative indexes
+                final_index -= 2
+            position_on_map = order_to_map_position[land_type][final_index]
             f_string = "\n#allowedplayer {0}\n#specstart {0} {1}\n#setland {1}".format(
                 nation_id, position_on_map
             )
