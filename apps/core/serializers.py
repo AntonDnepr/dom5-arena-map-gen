@@ -62,10 +62,10 @@ class GenerateMapSerializer(serializers.Serializer):
 
     def validate(self, data):
         nations_list = [
-            data["land_nation_1"],
-            data["land_nation_2"],
-            data["water_nation_1"],
-            data["water_nation_2"],
+            data.get("land_nation_1"),
+            data.get("land_nation_2"),
+            data.get("water_nation_1"),
+            data.get("water_nation_2"),
         ]
         if len(list(filter(lambda x: bool(x), nations_list))) < 2:
             raise serializers.ValidationError("You should select at least 2 nations")

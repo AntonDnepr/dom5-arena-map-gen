@@ -284,7 +284,6 @@ def test_mapgenerator_function_with_water_nation(data_for_mapgen_uw):
 def test_insert_data_into_template(data_for_mapgen):
     data, nation1, nation2 = data_for_mapgen
     serializer = GenerateMapSerializer(data=data)
-    start1, start2 = GenerateMapSerializer.LAND_STARTS
     assert serializer.is_valid()
     returned_data = serializer.process_data(serializer.validated_data)
     mapgenerated_text = serializer.data_into_map(returned_data)
@@ -298,11 +297,26 @@ def test_insert_data_into_template(data_for_mapgen):
 def test_insert_uw_data_into_template(data_for_mapgen_uw):
     data, nation1, nation2 = data_for_mapgen_uw
     serializer = GenerateMapSerializer(data=data)
-    start1, start2 = GenerateMapSerializer.LAND_STARTS
     assert serializer.is_valid()
     returned_data = serializer.process_data(serializer.validated_data)
     mapgenerated_text = serializer.data_into_map(returned_data)
     final_map = serializer.substitute(mapgenerated_text)
+    assert mapgenerated_text[0] in final_map
+    assert mapgenerated_text[1] in final_map
+    assert "$nation3" not in final_map
+    assert "$nation4" not in final_map
+
+
+def test_final_view(data_for_mapgen, client):
+    data, nation1, nation2 = data_for_mapgen
+    serializer = GenerateMapSerializer(data=data)
+    url = reverse("v0:generate_map")
+    response = client.post(url, data, content_type="application/json")
+    assert response.status_code == 200
+    assert serializer.is_valid()
+    returned_data = serializer.process_data(serializer.validated_data)
+    mapgenerated_text = serializer.data_into_map(returned_data)
+    final_map = response.data
     assert mapgenerated_text[0] in final_map
     assert mapgenerated_text[1] in final_map
     assert "$nation3" not in final_map
