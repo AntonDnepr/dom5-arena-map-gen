@@ -153,7 +153,7 @@ class GenerateMapSerializer(serializers.Serializer):
         required_keys = [f"nation{x}" for x in range(1, 5)]
         for key in required_keys:
             if key not in data_dict:
-                data_dict[key] = ''
+                data_dict[key] = ""
         with open("apps/core/data/Arena.map", "r") as f:
             src = Template(f.read())
             result = src.substitute(data_dict)
