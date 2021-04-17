@@ -1,3 +1,5 @@
+from string import Template
+
 from rest_framework import serializers
 
 from apps.domdata.models import Nation, Unit
@@ -145,3 +147,14 @@ class GenerateMapSerializer(serializers.Serializer):
                     f_string += commander_string
             returned_data.append(f_string)
         return returned_data
+
+    def substitute(self, data):
+        data_dict = {f"nation{x}": y for x, y in enumerate(data, start=1)}
+        required_keys = [f"nation{x}" for x in range(1, 5)]
+        for key in required_keys:
+            if key not in data_dict:
+                data_dict[key] = None
+        with open("apps/core/data/Arena.map", "r") as f:
+            src = Template(f.read())
+            result = src.substitute(data_dict)
+        return result
