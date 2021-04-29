@@ -26,7 +26,6 @@ urlpatterns = [
         name="swagger",
     ),
     path("api/v0/", include(("apps.core.urls", "core"), namespace="v0")),
-    re_path(r"^django-rq/", include("django_rq.urls")),
 ]
 
 urlpatterns += [re_path(r"^.*", TemplateView.as_view(template_name="index.html"))]

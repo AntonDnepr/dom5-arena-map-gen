@@ -145,7 +145,6 @@ INSTALLED_APPS = [
     "drf_yasg",
     "anymail",
     "rest_framework",
-    "django_rq",
     "apps.core",
     "apps.domdata",
     "apps.users",
@@ -361,9 +360,6 @@ if ENV == "test":
 
     # No SSL in testing
     DEFAULT_PROTOCOL = "http"
-    # RQ should be synchronously
-    for key, value in RQ_QUEUES.items():  # noqa
-        value["ASYNC"] = False
 
     import tempfile
 

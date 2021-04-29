@@ -47,8 +47,6 @@ services:
       - EMAIL_PORT=${EMAIL_PORT}
       - EMAIL_HOST_USER=${EMAIL_HOST_USER}
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-      - RQ_HOST=redis
-      - RQ_PORT=${DOCKER_REDIS_PORT}
     command: /bin/bash -c "PIPENV_DONT_LOAD_ENV=1 python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
       - default_dom5
@@ -59,7 +57,6 @@ services:
     tty: true
     depends_on:
       - postgres
-      - redis
 
 networks:
   default_dom5:
