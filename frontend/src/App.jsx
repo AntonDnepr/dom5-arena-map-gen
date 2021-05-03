@@ -28,14 +28,13 @@ const Step1 = ({
         <p>1) Select nations, that will be used in map generation (Current step).</p>
         <p>
           There is no validation, that nations are selected from the same Age.
-          This is up on you.
         </p>
         <p>
           You should select at least 2 nations from the same Age for game
           to not declare you a winner immediately.
         </p>
         <p>
-          There is no validation for land/water nation, so this up on you as well.
+          There is no validation for land/water nation, so please be careful when selecting them.
         </p>
         <p>
           2) One by one, you will be prompt to generate commanders and units
