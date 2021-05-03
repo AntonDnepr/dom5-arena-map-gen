@@ -1,6 +1,5 @@
 import os
 import sys
-from datetime import timedelta
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -55,6 +54,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ########################################################################################
 
 DEBUG = env.bool("DJANGO_DEBUG", False)
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # To make things easy for new developers, we are starting with a SECRET_KEY - we are
 # checking this on production
@@ -100,7 +100,11 @@ SITE_ID = 1
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(os.path.join(BASE_DIR, "templates"))],
+        "DIRS": [
+            str(os.path.join(BASE_DIR, "templates")),
+            os.path.join(BASE_DIR, "frontend/build"),
+            os.path.join(BASE_DIR, "frontend/public"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -139,19 +143,15 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "corsheaders",
     "django_extensions",
-    "drf_yasg",
-    "anymail",
     "rest_framework",
-    "rest_auth",
-    "django_rq",
     "apps.core",
+    "apps.domdata",
     "apps.users",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -180,50 +180,6 @@ DATABASES = {"default": env.db("DATABASE_URL")}
 
 ########################################################################################
 #                                                                                      #
-#                                           Caching & RQ                               #
-#                                                                                      #
-########################################################################################
-
-REDIS_URL = env.str("REDIS_URL", default="redis://redis:6379")
-
-if REDIS_URL:
-    RQ_SHOW_ADMIN_LINK = True
-    CACHE_TIMEOUT = env.int("CACHE_TIMEOUT", default=300)
-    AUTOCOMPLETES_CACHE_NAME = "autocompletes"
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_URL,
-            "KEY_PREFIX": "default_",
-            "TIMEOUT": CACHE_TIMEOUT,
-        },
-        "rq": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_URL,
-            "KEY_PREFIX": "rq_",
-            "TIMEOUT": CACHE_TIMEOUT,
-            "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-        },
-    }
-
-    RQ = {
-        "DEFAULT_RESULT_TTL": env.int(
-            "RQ_DEFAULT_RESULT_TTL", default=86400  # How long will the result be kept
-        )  # in the database?
-    }
-
-    RQ_DEFAULT_TIMEOUT = env.int(
-        "RQ_DEFAULT_TIMEOUT", default=180  # maximum runtime of the job before it’s
-    )  # interrupted / marked as failed
-
-    RQ_QUEUES = {
-        "email": {"USE_REDIS_CACHE": "rq", "DEFAULT_TIMEOUT": RQ_DEFAULT_TIMEOUT},
-        "default": {"USE_REDIS_CACHE": "rq", "DEFAULT_TIMEOUT": RQ_DEFAULT_TIMEOUT},
-        "high": {"USE_REDIS_CACHE": "rq", "DEFAULT_TIMEOUT": RQ_DEFAULT_TIMEOUT},
-    }
-
-########################################################################################
-#                                                                                      #
 #                                      DJANGO REST                                     #
 #                                                                                      #
 ########################################################################################
@@ -234,38 +190,9 @@ ACCOUNT_USERNAME_REQUIRED = False
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "EXCEPTION_HANDLER": "apps.core.custom_exceptions.custom_exception_handler",
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=60 * 60 * 12),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
-    "AUTH_TOKEN_CLASSES": ("apps.users.tokens.CustomAccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "JTI_CLAIM": "jti",
-    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-}
-
-
-REST_AUTH_SERIALIZERS = {
-    "PASSWORD_RESET_SERIALIZER": (
-        "apps.users.serializers.CustomPasswordResetSerializer"
-    )
-}
 
 ########################################################################################
 #                                                                                      #
@@ -432,9 +359,6 @@ if ENV == "test":
 
     # No SSL in testing
     DEFAULT_PROTOCOL = "http"
-    # RQ should be synchronously
-    for key, value in RQ_QUEUES.items():  # noqa
-        value["ASYNC"] = False
 
     import tempfile
 
@@ -448,50 +372,3 @@ if ENV == "test":
 #                                           App specific                               #
 #                                                                                      #
 ########################################################################################
-
-
-########################################################################################
-#                                                                                      #
-#                                     Swagger settings                                 #
-#                                                                                      #
-########################################################################################
-
-
-SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": False,
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
-    },
-    "REFETCH_SCHEMA_WITH_AUTH": True,
-}
-
-########################################################################################
-#                                                                                      #
-#                                   Email settings                                     #
-#                                                                                      #
-########################################################################################
-
-DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="admin@mail.com")
-SERVER_EMAIL = env.str("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
-
-SITE_NAME = env.str("SITE_NAME", default="example.com")
-
-EMAIL_HOST = env.str("EMAIL_HOST", default="")
-MAILGUN_API_KEY = env.str("MAILGUN_API_KEY", default="")
-
-if EMAIL_HOST:
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = env.str("EMAIL_HOST")
-    EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
-    EMAIL_PORT = env.str("EMAIL_PORT")
-    EMAIL_USE_TLS = True
-elif MAILGUN_API_KEY:
-    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
-    ANYMAIL = {
-        "MAILGUN_API_KEY": env.str("MAILGUN_API_KEY", default=""),
-        "MAILGUN_SENDER_DOMAIN": env.str("MAILGUN_SENDER_DOMAIN", default=""),
-        "MAILGUN_API_URL": env.str(
-            "MAILGUN_API_URL", default="https://api.mailgun.net/v3"
-        ),
-    }

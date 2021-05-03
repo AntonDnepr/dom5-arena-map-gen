@@ -1,3 +1,21 @@
+## Purpose of the project
+
+Main purpose of this project is to automate map generation for the Arena map at [Dominions 5](http://www.illwinter.com/dom5) game.
+
+
+## Credits
+Original Arena map:
+https://steamcommunity.com/sharedfiles/filedetails/?id=1404827698
+
+Please support author of the Arena map: http://www.youtube.com/dastactic
+
+Also this project make extensive use of the data from:
+https://github.com/larzm42/dom5inspector
+
+All credits for data dumps into csv format goes to them.
+
+
+# Development guide
 ## Install & Run Locally
 
 First you need to write your `.env` file with correct variables: when using the dockerized
@@ -14,29 +32,16 @@ You have to set or modify some variables in order to start the docker containers
     You can see busy ports using the command `docker ps` (section "PORTS" - 0.0.0.0:`5426`->5432/tcp).
 
     - DOCKER_POSTGRES_PORT
-    - DOCKER_REDIS_PORT
     - DOCKER_BACKEND_PORT
 
-3. Email settings variables:
-    We use a mailtrap for local development.
-    You can see the data for these variables at https://mailtrap.io/inboxes
-    (select one of the inboxes, go to the "Integrations" section, select "Django")
-
-    - EMAIL_HOST
-    - EMAIL_HOST_USER
-    - EMAIL_HOST_PASSWORD
-    - EMAIL_PORT
-    - MAILGUN_API_KEY
-    - MAILGUN_SENDER_DOMAIN
-
-4. Django settings:
+3. Django settings:
     - ENV - use "local" for local development
 
 All variables must be written without quotation marks and without spaces before and after the equal sign.
 
-Now you can run docker with `pipenv run go-docker` or you can use
-`docker-compose up -d postgres` for local backend development
+Now you can run docker with `pipenv run go-docker` if you have pipenv installed or you can use `docker-compose up` to start local backend
 
+You can run frontend from the frontend folder. The frontend was created with Node v10.24.0 and yarn 1.21
 
 ## Add git hooks
 
@@ -68,12 +73,9 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 
 `docs: add changes to the Readme #123`
 
-## Documentation
 
-Please make sure that each public class, method and function has meaningful documentation which describes the purpose of the code.
-To make things easier to follow we use Python annotations to the public functions and method.
-Cheat sheet:
-https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html
-
-More info here:
-https://docs.python.org/3/library/typing.html
+## Plans for the future versions
+- Add Holy for magic paths;
+- Add sprites to the suggestions (maybe);
+- Mods support;
+- Automate pulling new data for dominions;

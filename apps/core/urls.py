@@ -1,8 +1,17 @@
-from django.urls import include, path
+from django.urls import path
 
-from rest_framework.routers import DefaultRouter
+from apps.core.views import AutocompleteNationsView, AutocompleteUnitsView, generate_map
 
-router = DefaultRouter()
-
-urlpatterns = [path("users/", include("apps.users.urls"))]
-urlpatterns += router.urls
+urlpatterns = [
+    path(
+        "autocomplete/units/",
+        AutocompleteUnitsView.as_view(),
+        name="autocomplete_units_view",
+    ),
+    path(
+        "autocomplete/nations/",
+        AutocompleteNationsView.as_view(),
+        name="autocomplete_nations_view",
+    ),
+    path("generate-map/", generate_map, name="generate_map"),
+]
