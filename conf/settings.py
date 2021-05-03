@@ -4,7 +4,9 @@ import sys
 from django.utils.translation import ugettext_lazy as _
 
 import environ
+import sentry_sdk
 from corsheaders.defaults import default_headers
+from sentry_sdk.integrations.django import DjangoIntegration
 
 ########################################################################################
 #                                                                                      #
@@ -168,7 +170,18 @@ MIDDLEWARE = [
 #                                                                                      #
 ########################################################################################
 
-print("No logging configured!")
+SENTRY_DSN = env.str("SENTRY_DSN", default="")
+if SENTRY_DSN:
+    print("Sentry logging configured!")
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        # The traces_sample_rate can range from 0 to 1, inclusive.
+        # To send 20% of transactions you need to set this value to 0.2.
+        # Value 1 would be good for testing but you should change it on production mode.
+        traces_sample_rate=env.float("TRACES_SAMPLE_RATE", default=0.2),
+        send_default_pii=env.bool("SEND_DEFAUL_PPI", default=True),
+    )
 
 ########################################################################################
 #                                                                                      #

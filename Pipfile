@@ -13,6 +13,7 @@ django-cors-headers = "*"
 django-extensions = "*"             # Different helpers for Django REST Framework
 argon2-cffi = "*"
 whitenoise = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 ipdb = "*"                           # Debugging
