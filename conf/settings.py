@@ -54,6 +54,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ########################################################################################
 
 DEBUG = env.bool("DJANGO_DEBUG", False)
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # To make things easy for new developers, we are starting with a SECRET_KEY - we are
 # checking this on production
@@ -142,8 +143,6 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "corsheaders",
     "django_extensions",
-    "drf_yasg",
-    "anymail",
     "rest_framework",
     "apps.core",
     "apps.domdata",
@@ -373,19 +372,3 @@ if ENV == "test":
 #                                           App specific                               #
 #                                                                                      #
 ########################################################################################
-
-
-########################################################################################
-#                                                                                      #
-#                                     Swagger settings                                 #
-#                                                                                      #
-########################################################################################
-
-
-SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": False,
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
-    },
-    "REFETCH_SCHEMA_WITH_AUTH": True,
-}

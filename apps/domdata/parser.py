@@ -53,6 +53,7 @@ def parse_units():
                 unit.nations.add(nation)
 
     special_troop_file = "csvs/attributes_by_nation.csv"
+    # some magic numbers, that I've gotten from searching source of the modinspector
     commander_attributes_numbers = [
         158,
         159,

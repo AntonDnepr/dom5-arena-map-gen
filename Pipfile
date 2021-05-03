@@ -11,7 +11,6 @@ psycopg2-binary = "*"                # Database connector (LGPL)
 gunicorn = "*"                       # Python WSGI HTTP Server
 django-cors-headers = "*"
 django-extensions = "*"             # Different helpers for Django REST Framework
-drf-yasg = "*"
 argon2-cffi = "*"
 
 [dev-packages]
