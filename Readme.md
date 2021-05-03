@@ -39,6 +39,8 @@ You have to set or modify some variables in order to start the docker containers
 
 All variables must be written without quotation marks and without spaces before and after the equal sign.
 
+Read data from `.env` file into terminal with `set -o allexport; source .env; set +o allexport`
+
 Now you can run docker with `pipenv run go-docker` if you have pipenv installed or you can use `docker-compose up` to start local backend
 
 You can run frontend from the frontend folder. The frontend was created with Node v10.24.0 and yarn 1.21

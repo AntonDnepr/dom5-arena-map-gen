@@ -97,7 +97,7 @@ class UnitSuggestions extends React.Component {
 
       // Autosuggest will pass through all these props to the input.
       const inputProps = {
-        placeholder: 'Type unit name',
+        placeholder: 'Type unit name or unit id',
         value,
         onChange: this.onChange,
       };

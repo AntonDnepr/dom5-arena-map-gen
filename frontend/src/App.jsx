@@ -15,6 +15,37 @@ const Step1 = ({
   <>
     <Row>
       <Col>
+        <p>To make use of this tool, you need Arena map. You can install one from here:</p>
+        <p>
+          <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1404827698" target="_blank" rel="noreferrer nofollow">Arena map</a>
+        </p>
+        <p>Please support author of the riginal map.</p>
+      </Col>
+    </Row>
+    <Row>
+      <Col>
+        <p>This tool has 2 steps:</p>
+        <p>1) Select nations, that will be used in map generation (Current step).</p>
+        <p>
+          There is no validation, that nations are selected from the same Age.
+          This is up on you.
+        </p>
+        <p>
+          You should select at least 2 nations from the same Age for game
+          to not declare you a winner immediately.
+        </p>
+        <p>
+          There is no validation for land/water nation, so this up on you as well.
+        </p>
+        <p>
+          2) One by one, you will be prompt to generate commanders and units
+          for the selected nations. You can skip nations if you do not want them
+          having anything but starting expansion party
+        </p>
+      </Col>
+    </Row>
+    <Row>
+      <Col>
         Select land nations
       </Col>
     </Row>
@@ -339,6 +370,28 @@ const Step2 = ({
       <Row>
         <Col>
           <p>{selectedNation}</p>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <p>
+            For this step, you should select commanders and units.
+            You can skip this if you do not want to add anything to starting troops of the nation;
+          </p>
+          <p>
+            For map to generate correctly,
+            you should have at least 1 commander to add additional units to;
+          </p>
+          <p>
+            Some of the commanders and troops have the same name,
+            so you should use unit_id to distinguish them;
+          </p>
+          <p>
+            Use
+            <a href="https://larzm42.github.io/dom5inspector/" target="_blank" rel="noreferrer nofollow"> modinspector</a>
+            {' '}
+            to find out unit_id;
+          </p>
         </Col>
       </Row>
       <Row>
