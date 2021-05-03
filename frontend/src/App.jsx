@@ -19,7 +19,7 @@ const Step1 = ({
         <p>
           <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1404827698" target="_blank" rel="noreferrer nofollow">Arena map</a>
         </p>
-        <p>Please support author of the riginal map.</p>
+        <p>Please support author of the original map.</p>
       </Col>
     </Row>
     <Row>
