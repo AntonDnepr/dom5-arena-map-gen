@@ -261,7 +261,6 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = [
-    str(os.path.join(BASE_DIR, "static")),
     os.path.join(BASE_DIR, "frontend/build/static"),
 ]
 
