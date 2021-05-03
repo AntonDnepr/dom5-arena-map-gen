@@ -81,3 +81,7 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 - Add sprites to the suggestions (maybe);
 - Mods support;
 - Automate pulling new data for dominions;
+
+
+## License
+GNU GPLv3 (see License.md)
