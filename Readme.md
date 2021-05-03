@@ -32,7 +32,6 @@ You have to set or modify some variables in order to start the docker containers
     You can see busy ports using the command `docker ps` (section "PORTS" - 0.0.0.0:`5426`->5432/tcp).
 
     - DOCKER_POSTGRES_PORT
-    - DOCKER_REDIS_PORT
     - DOCKER_BACKEND_PORT
 
 3. Django settings:
@@ -40,9 +39,9 @@ You have to set or modify some variables in order to start the docker containers
 
 All variables must be written without quotation marks and without spaces before and after the equal sign.
 
-Now you can run docker with `pipenv run go-docker` or you can use
-`docker-compose up -d postgres` for local backend development
+Now you can run docker with `pipenv run go-docker` if you have pipenv installed or you can use `docker-compose up` to start local backend
 
+You can run frontend from the frontend folder. The frontend was created with Node v10.24.0 and yarn 1.21
 
 ## Add git hooks
 
@@ -73,3 +72,10 @@ https://udacity.github.io/git-styleguide/
 To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 
 `docs: add changes to the Readme #123`
+
+
+## Plans for the future versions
+- Add Holy for magic paths;
+- Add sprites to the suggestions (maybe);
+- Mods support;
+- Automate pulling new data for dominions;

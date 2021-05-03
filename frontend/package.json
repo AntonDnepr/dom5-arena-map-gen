@@ -44,5 +44,8 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint-config-airbnb": "^18.2.1"
+  },
+  "engines": {
+    "node": "==10.24.x"
   }
 }
