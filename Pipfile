@@ -12,6 +12,7 @@ gunicorn = "*"                       # Python WSGI HTTP Server
 django-cors-headers = "*"
 django-extensions = "*"             # Different helpers for Django REST Framework
 argon2-cffi = "*"
+whitenoise = "*"
 
 [dev-packages]
 ipdb = "*"                           # Debugging

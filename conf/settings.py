@@ -152,6 +152,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -259,7 +260,10 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-STATICFILES_DIRS = (str(os.path.join(BASE_DIR, "static")),)
+STATICFILES_DIRS = [
+    str(os.path.join(BASE_DIR, "static")),
+    os.path.join(BASE_DIR, "frontend/build/static"),
+]
 
 
 ########################################################################################
