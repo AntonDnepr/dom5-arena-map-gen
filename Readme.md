@@ -75,6 +75,9 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 
 `docs: add changes to the Readme #123`
 
+## Changelog
+20/05/2021 - Cave map support
+
 
 ## Plans for the future versions
 - Add Holy for magic paths;
