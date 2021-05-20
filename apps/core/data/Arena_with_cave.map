@@ -58,11 +58,11 @@ $nation4
 #terrain 5 33554432
 #landname 6 "Water Arena"
 #terrain 6 516
-#terrain 7 4624
+#terrain 7 528
 #terrain 8 33554432
 #terrain 9 528
 #landname 10 "Land Arena"
-#terrain 10 512
+#terrain 10 4624
 #terrain 11 532
 #terrain 12 33554436
 #terrain 13 532

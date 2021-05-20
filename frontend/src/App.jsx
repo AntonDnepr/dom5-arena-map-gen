@@ -10,7 +10,7 @@ import UnitSuggestions from './UnitSuggestions';
 import uuidv4 from './utils';
 
 const Step1 = ({
-  nations, isLoading, selectLandNations, selectWaterNations,
+  nations, isLoading, selectLandNations, selectWaterNations, selectCaveMap, selectedCaveMap,
 }) => (
   <>
     <Row>
@@ -41,8 +41,18 @@ const Step1 = ({
           for the selected nations. You can skip nations if you do not want them
           having anything but starting expansion party
         </p>
+        <p>
+          You can select map with cave in it to test this specific terrain.
+        </p>
       </Col>
     </Row>
+    <Row>
+      <Col>
+        <b>Select cave map?</b>
+        <input type="checkbox" value={selectedCaveMap} onChange={() => { selectCaveMap(!selectedCaveMap); }} />
+      </Col>
+    </Row>
+    <br />
     <Row>
       <Col>
         Select land nations
@@ -85,6 +95,8 @@ Step1.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   selectLandNations: PropTypes.arrayOf(PropTypes.func).isRequired,
   selectWaterNations: PropTypes.arrayOf(PropTypes.func).isRequired,
+  selectCaveMap: PropTypes.func.isRequired,
+  selectedCaveMap: PropTypes.bool.isRequired,
 };
 
 const NextStepButton1 = ({ setCurrentStep }) => (
@@ -498,6 +510,7 @@ function App() {
   const [selectedWaterNation2, selectWaterNation2] = useState('');
   const [selectedCommanders, addCommander] = useState([]);
   const [selectedUnits, addUnit] = useState([]);
+  const [selectedCaveMap, selectCaveMap] = useState(false);
 
   useEffect(() => {
     if (nations.length < 1 && !isLoading) {
@@ -530,6 +543,7 @@ function App() {
       water_nation_2: selectedWaterNation2,
       commanders: selectedCommanders,
       units: selectedUnits,
+      use_cave_map: selectedCaveMap,
     };
     setLoading(true);
     axios.post('/api/v0/generate-map/', objectToPost)
@@ -548,6 +562,8 @@ function App() {
         isLoading={isLoading}
         selectLandNations={[selectLandNation1, selectLandNation2]}
         selectWaterNations={[selectWaterNation1, selectWaterNation2]}
+        selectedCaveMap={selectedCaveMap}
+        selectCaveMap={selectCaveMap}
       />
       )}
       {showNextStep && (
