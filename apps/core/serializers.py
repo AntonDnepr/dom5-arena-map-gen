@@ -59,6 +59,7 @@ class GenerateMapSerializer(serializers.Serializer):
     )
     commanders = serializers.ListField(required=False, validators=[unit_exists])
     units = serializers.ListField(required=False, validators=[unit_exists])
+    use_cave_map = serializers.BooleanField(required=False, default=False)
 
     def validate(self, data):
         nations_list = [
@@ -154,7 +155,10 @@ class GenerateMapSerializer(serializers.Serializer):
         for key in required_keys:
             if key not in data_dict:
                 data_dict[key] = ""
-        with open("apps/core/data/Arena.map", "r") as f:
-            src = Template(f.read())
+        map_name = (
+            "Arena_with_cave" if self.validated_data.get("use_cave_map") else "Arena"
+        )
+        with open(f"apps/core/data/{map_name}.map", "r") as mapfile:
+            src = Template(mapfile.read())
             result = src.substitute(data_dict)
         return result

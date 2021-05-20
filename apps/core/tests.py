@@ -1,3 +1,6 @@
+import copy
+from unittest import mock
+
 from django.urls import reverse
 
 import pytest
@@ -282,7 +285,7 @@ def test_mapgenerator_function_with_water_nation(data_for_mapgen_uw):
 
 
 def test_insert_data_into_template(data_for_mapgen):
-    data, nation1, nation2 = data_for_mapgen
+    data, *other = data_for_mapgen
     serializer = GenerateMapSerializer(data=data)
     assert serializer.is_valid()
     returned_data = serializer.process_data(serializer.validated_data)
@@ -305,6 +308,20 @@ def test_insert_uw_data_into_template(data_for_mapgen_uw):
     assert mapgenerated_text[1] in final_map
     assert "$nation3" not in final_map
     assert "$nation4" not in final_map
+
+
+def test_map_with_cave(data_for_mapgen):
+    data, *other = data_for_mapgen
+    data_with_cave = copy.deepcopy(data)
+    data_with_cave["use_cave_map"] = True
+    serializer = GenerateMapSerializer(data=data_with_cave)
+    assert serializer.is_valid()
+    returned_data = serializer.process_data(serializer.validated_data)
+    mapgenerated_text = serializer.data_into_map(returned_data)
+    mocked_open_function = mock.mock_open(read_data="")
+    with mock.patch("apps.core.serializers.open", mocked_open_function) as mocked:
+        serializer.substitute(mapgenerated_text)
+        mocked.assert_called_once_with("apps/core/data/Arena_with_cave.map", "r")
 
 
 def test_final_view(data_for_mapgen, client):
