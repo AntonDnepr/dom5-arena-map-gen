@@ -76,8 +76,8 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 `docs: add changes to the Readme #123`
 
 ## Changelog
-20/05/2021 - Cave map support
-02/06/2021 - Add mapname change, tweaked text; Add Holy for magic paths;
+- 20/05/2021 - Cave map support
+- 02/06/2021 - Add mapname change, tweaked text; Add Holy for magic paths;
 
 
 ## Plans for the future versions
