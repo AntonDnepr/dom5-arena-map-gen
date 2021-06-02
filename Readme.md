@@ -77,6 +77,7 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 
 ## Changelog
 20/05/2021 - Cave map support
+02/06/2021 - Add mapname change, tweaked text
 
 
 ## Plans for the future versions

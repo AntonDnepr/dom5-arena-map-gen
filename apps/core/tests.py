@@ -334,6 +334,9 @@ def test_final_view(data_for_mapgen, client):
     returned_data = serializer.process_data(serializer.validated_data)
     mapgenerated_text = serializer.data_into_map(returned_data)
     final_map = response.data
+    assert nation1.name in final_map
+    assert nation2.name in final_map
+    assert "vs" in final_map
     assert mapgenerated_text[0] in final_map
     assert mapgenerated_text[1] in final_map
     assert "$nation3" not in final_map

@@ -6,7 +6,7 @@
 --
 
 -- Title and image file
-#dom2title Arena
+#dom2title $map_name
 #imagefile ArenaMap.tga
 #winterimagefile ArenaMap-winter.tga
 #mapsize 1600 1200

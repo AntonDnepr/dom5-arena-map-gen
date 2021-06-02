@@ -159,6 +159,23 @@ class GenerateMapSerializer(serializers.Serializer):
             "Arena_with_cave" if self.validated_data.get("use_cave_map") else "Arena"
         )
         with open(f"apps/core/data/{map_name}.map", "r") as mapfile:
+            data = self.validated_data
+            nations_list = [
+                data.get("land_nation_1"),
+                data.get("land_nation_2"),
+                data.get("water_nation_1"),
+                data.get("water_nation_2"),
+            ]
+            add_string, index = "", 0
+            for nation in nations_list:
+                if nation:
+                    if not index:
+                        add_string += nation
+                        index += 1
+                    else:
+                        add_string += " vs {}".format(nation)
+            final_map_name = f"{map_name}_{add_string}"
+            data_dict["map_name"] = final_map_name
             src = Template(mapfile.read())
             result = src.substitute(data_dict)
         return result
