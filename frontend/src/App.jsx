@@ -218,6 +218,19 @@ const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
       </InputGroup>
     </Col>
     <Col>
+      <InputGroup size="sm">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>Priest</InputGroupText>
+        </InputGroupAddon>
+        <Input
+          onChange={
+          (e) => { setCommanderMagic({ ...commanderMagic, priest: e.target.value }); }
+          }
+          value={commanderMagic.priest || ''}
+        />
+      </InputGroup>
+    </Col>
+    <Col>
       <Button onClick={() => saveMagicEdit()}>Save</Button>
     </Col>
   </Row>
@@ -233,7 +246,7 @@ const CommanderRow = ({
 }) => {
   const [showEditMagic, setshowEditMagic] = React.useState(false);
   const onClick = (param) => setshowEditMagic(!param);
-  const [commanderMagic, setCommanderMagic] = useState({});
+  const [commanderMagic, setCommanderMagic] = useState(commander.magic || {});
   return (
     <div>
       (
@@ -262,7 +275,12 @@ const CommanderRow = ({
 
 CommanderRow.propTypes = {
   commander: PropTypes.shape(
-    { dominion_id: PropTypes.string, name: PropTypes.string, id: PropTypes.string },
+    {
+      dominion_id: PropTypes.string,
+      name: PropTypes.string,
+      id: PropTypes.string,
+      magic: PropTypes.objectOf(PropTypes.string),
+    },
   ).isRequired,
   selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
   duplicateRow: PropTypes.func.isRequired,
