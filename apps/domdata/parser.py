@@ -1,5 +1,7 @@
 import csv
+import glob
 import os
+import re
 
 from apps.domdata.models import Nation, Unit
 
@@ -87,3 +89,43 @@ def parse_units():
                     unit.commander = True
                     unit.save(update_fields=["commander"])
                 unit.nations.add(nation)
+
+
+def parse_dm_files():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    files_to_parse = glob.glob(os.path.join(current_dir, "mods/*.dm"))
+    for dmfile in files_to_parse:
+        with open(dmfile, "r") as file_content:
+            new_nation, new_monster = False, False
+            monster_id, monster_name = "", ""
+            nation_id, nation_name, nation_era = "", "", ""
+            for line in file_content.readlines():
+                if not line.startswith("--"):
+                    if "#newmonster" in line:
+                        new_nation, new_monster = False, True
+                        nation_id, nation_name, nation_era = "", "", ""
+                        monster_id = re.findall(r"\d+", line)[0]
+                    elif "#selectnation" in line:
+                        new_nation, new_monster = True, False
+                        monster_id, monster_name = "", ""
+                        nation_id = re.findall(r"\d+", line)[0]
+                    elif "#end" in line:
+                        if new_monster and monster_name:
+                            print(f"Monster: ({monster_id}) {monster_name}")
+                        elif new_nation and nation_name:
+                            print(
+                                f"nation in Era {nation_era}: "
+                                f"({nation_id}) {nation_name}"
+                            )
+                        new_nation, new_monster = False, False
+                        monster_id, monster_name = "", ""
+                        nation_id, nation_name, nation_era = "", "", ""
+                    if new_monster or new_nation:
+                        if "#name" in line and "nametype" not in line:
+                            name = " ".join(line.split(" ")[1:]).replace('"', "")
+                            if new_monster:
+                                monster_name = name
+                            elif new_nation:
+                                nation_name = name
+                        elif new_nation and "#era" in line:
+                            nation_era = " ".join(line.split(" ")[1:]).replace('"', "")
