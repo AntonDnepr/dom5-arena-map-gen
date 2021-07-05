@@ -111,11 +111,13 @@ def parse_dm_files():
                         nation_id = re.findall(r"\d+", line)[0]
                     elif "#end" in line:
                         if new_monster and monster_name:
-                            print(f"Monster: ({monster_id}) {monster_name}")
+                            Unit.objects.update_or_create(
+                                dominion_id=monster_id, defaults=dict(name=monster_name)
+                            )
                         elif new_nation and nation_name:
-                            print(
-                                f"nation in Era {nation_era}: "
-                                f"({nation_id}) {nation_name}"
+                            Nation.objects.update_or_create(
+                                dominion_id=nation_id,
+                                defaults=dict(name=nation_name, era=nation_era),
                             )
                         new_nation, new_monster = False, False
                         monster_id, monster_name = "", ""
