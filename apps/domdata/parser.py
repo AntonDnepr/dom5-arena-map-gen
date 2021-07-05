@@ -99,6 +99,7 @@ def parse_dm_files():
             new_nation, new_monster = False, False
             monster_id, monster_name = "", ""
             nation_id, nation_name, nation_era = "", "", ""
+            mod = Unit.DE if "DomEnhanced" in dmfile else Unit.DEBUG
             for line in file_content.readlines():
                 if not line.startswith("--"):
                     if "#newmonster" in line:
@@ -112,12 +113,15 @@ def parse_dm_files():
                     elif "#end" in line:
                         if new_monster and monster_name:
                             Unit.objects.update_or_create(
-                                dominion_id=monster_id, defaults=dict(name=monster_name)
+                                dominion_id=monster_id,
+                                defaults=dict(name=monster_name, modded=mod),
                             )
                         elif new_nation and nation_name:
                             Nation.objects.update_or_create(
                                 dominion_id=nation_id,
-                                defaults=dict(name=nation_name, era=nation_era),
+                                defaults=dict(
+                                    name=nation_name, era=nation_era, modded=mod
+                                ),
                             )
                         new_nation, new_monster = False, False
                         monster_id, monster_name = "", ""
