@@ -36,7 +36,7 @@ class UnitFactory(factory.django.DjangoModelFactory):
             extracted = []
 
         if not Nation.objects.exists():
-            NationFactory.create_batch(10)
+            NationFactory.create_batch(10, **{"modded": self.modded})
 
         ids = list(Nation.objects.values_list("pk", flat=True))
         nations_to_add = [random.choice(ids) for x in range(1, 4)]

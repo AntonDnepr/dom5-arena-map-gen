@@ -12,17 +12,29 @@ from apps.domdata.models import Nation, Unit
 
 
 class AutocompleteUnitsView(ListAPIView):
-    queryset = Unit.objects.all()
     serializer_class = UnitSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["dominion_id", "name"]
 
+    def get_queryset(self):
+        mods = self.request.GET.get("modded")
+        if mods:
+            mods_list = mods.split(",")
+            return Unit.objects.filter(modded__in=mods_list)
+        return Unit.objects.filter(modded=Unit.VANILLA)
+
 
 class AutocompleteNationsView(ListAPIView):
-    queryset = Nation.objects.all()
     serializer_class = NationSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["dominion_id", "name"]
+
+    def get_queryset(self):
+        mods = self.request.GET.get("modded")
+        if mods:
+            mods_list = mods.split(",")
+            return Nation.objects.filter(modded__in=mods_list)
+        return Nation.objects.filter(modded=Nation.VANILLA)
 
 
 @api_view(["POST"])

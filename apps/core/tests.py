@@ -18,11 +18,50 @@ pytestmark = pytest.mark.django_db()
 
 @pytest.fixture
 def prepare_data():
-    UnitFactory.create_batch(50)
+    NationFactory.create_batch(10, **{"modded": 1})
+    NationFactory.create_batch(10, **{"modded": 2})
+    NationFactory.create_batch(10, **{"modded": 3})
+    UnitFactory.create_batch(10, **{"modded": 1})
+    UnitFactory.create_batch(10, **{"modded": 2})
+    UnitFactory.create_batch(10, **{"modded": 3})
+
+
+@pytest.mark.parametrize("test_input,expected", [("1", 10), ("1,2", 20), ("1,2,3", 30)])
+def test_autocomplete_units_no_search_modded(
+    prepare_data, client, test_input, expected
+):
+    url = reverse("v0:autocomplete_units_view") + f"?modded={test_input}"
+    response = client.get(url)
+    assert response.status_code == 200
+    assert len(response.data) == expected
+
+
+def test_autocomplete_units_no_search_no_modded(prepare_data, client):
+    url = reverse("v0:autocomplete_units_view")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert len(response.data) == 10
+
+
+@pytest.mark.parametrize("test_input,expected", [("1", 10), ("1,2", 20), ("1,2,3", 30)])
+def test_autocomplete_nations_no_search_modded(
+    prepare_data, client, test_input, expected
+):
+    url = reverse("v0:autocomplete_nations_view") + f"?modded={test_input}"
+    response = client.get(url)
+    assert response.status_code == 200
+    assert len(response.data) == expected
+
+
+def test_autocomplete_nations_no_search_no_modded(prepare_data, client):
+    url = reverse("v0:autocomplete_nations_view")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert len(response.data) == 10
 
 
 def test_autocomplete_units_search_by_dominion_id(prepare_data, client):
-    latest_unit = Unit.objects.last()
+    latest_unit = Unit.objects.filter(modded=Unit.VANILLA).last()
     url = reverse("v0:autocomplete_units_view") + f"?search={latest_unit.dominion_id}"
     response = client.get(url)
     assert response.status_code == 200
@@ -30,7 +69,7 @@ def test_autocomplete_units_search_by_dominion_id(prepare_data, client):
 
 
 def test_autocomplete_units_search_by_name(prepare_data, client):
-    latest_unit = Unit.objects.last()
+    latest_unit = Unit.objects.filter(modded=Unit.VANILLA).last()
     url = reverse("v0:autocomplete_units_view") + f"?search={latest_unit.name}"
     response = client.get(url)
     assert response.status_code == 200
@@ -38,7 +77,7 @@ def test_autocomplete_units_search_by_name(prepare_data, client):
 
 
 def test_autocomplete_units_search_by_partial_name(prepare_data, client):
-    latest_unit = Unit.objects.last()
+    latest_unit = Unit.objects.filter(modded=Unit.VANILLA).last()
     url = reverse("v0:autocomplete_units_view") + f"?search={latest_unit.name[:1]}"
     response = client.get(url)
     assert response.status_code == 200
@@ -46,7 +85,7 @@ def test_autocomplete_units_search_by_partial_name(prepare_data, client):
 
 
 def test_autocomplete_nations_search_by_dominion_id(prepare_data, client):
-    nation = Nation.objects.last()
+    nation = Nation.objects.filter(modded=Nation.VANILLA).last()
     url = reverse("v0:autocomplete_nations_view") + f"?search={nation.dominion_id}"
     response = client.get(url)
     assert response.status_code == 200
@@ -54,7 +93,7 @@ def test_autocomplete_nations_search_by_dominion_id(prepare_data, client):
 
 
 def test_autocomplete_nations_search_by_name(prepare_data, client):
-    nation = Nation.objects.last()
+    nation = Nation.objects.filter(modded=Nation.VANILLA).last()
     url = reverse("v0:autocomplete_nations_view") + f"?search={nation.name}"
     response = client.get(url)
     assert response.status_code == 200
@@ -62,7 +101,7 @@ def test_autocomplete_nations_search_by_name(prepare_data, client):
 
 
 def test_autocomplete_nations_search_by_partial_name(prepare_data, client):
-    nation = Nation.objects.last()
+    nation = Nation.objects.filter(modded=Nation.VANILLA).last()
     url = reverse("v0:autocomplete_nations_view") + f"?search={nation.name[:1]}"
     response = client.get(url)
     assert response.status_code == 200
