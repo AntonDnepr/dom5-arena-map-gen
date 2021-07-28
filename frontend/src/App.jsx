@@ -154,6 +154,7 @@ function App() {
             selectedCommanders={selectedCommanders}
             selectedUnits={selectedUnits}
             selectUnit={addUnit}
+            selectedMods={selectedMods}
           />
           {showNextNation
           && (

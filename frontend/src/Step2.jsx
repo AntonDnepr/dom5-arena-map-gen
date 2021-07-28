@@ -9,7 +9,7 @@ import UnitRow from './UnitRow';
 import uuidv4 from './utils';
 
 const Step2 = ({
-  selectedNation, selectCommander, selectedCommanders, selectedUnits, selectUnit,
+  selectedNation, selectCommander, selectedCommanders, selectedUnits, selectUnit, selectedMods,
 }) => {
   const deleteRow = (uuid, arrayToFilter) => {
     const newSelection = arrayToFilter.filter(
@@ -131,11 +131,17 @@ const Step2 = ({
       <Row>
         <Col>
           <p>Select commanders</p>
-          <UnitSuggestions id="commander" selectUnit={selectCommander} selectedUnits={selectedCommanders} selectedNation={selectedNation} />
+          <UnitSuggestions
+            id="commander"
+            selectUnit={selectCommander}
+            selectedUnits={selectedCommanders}
+            selectedNation={selectedNation}
+            selectedMods={selectedMods}
+          />
         </Col>
         <Col>
           <p>Select units to add to the commanders</p>
-          <UnitSuggestions id="unit" selectUnit={selectUnit} selectedUnits={selectedUnits} selectedNation={selectedNation} />
+          <UnitSuggestions id="unit" selectUnit={selectUnit} selectedUnits={selectedUnits} selectedNation={selectedNation} selectedMods={selectedMods} />
         </Col>
       </Row>
     </>
@@ -148,6 +154,7 @@ Step2.propTypes = {
   selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectUnit: PropTypes.func.isRequired,
+  selectedMods: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default Step2;
