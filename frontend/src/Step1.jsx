@@ -1,5 +1,5 @@
 import {
-  Row, Col,
+  Row, Col, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -44,16 +44,40 @@ const Step1 = ({
     </Row>
     <Row>
       <Col>
-        <b>Select cave map?</b>
-        <input type="checkbox" value={selectedCaveMap} onChange={() => { selectCaveMap(!selectedCaveMap); }} />
+        <InputGroup size="sm">
+          <InputGroupAddon addonType="append">
+            <InputGroupText>Select cave map?</InputGroupText>
+          </InputGroupAddon>
+          <Input
+            onChange={() => { selectCaveMap(!selectedCaveMap); }}
+            value={selectedCaveMap}
+            type="checkbox"
+          />
+        </InputGroup>
       </Col>
       <Col>
-        <b>Add Debug Sensei to the lists?</b>
-        <input type="checkbox" value={selectedCaveMap} onChange={() => { selectCaveMap(!selectedCaveMap); }} />
+        <InputGroup size="sm">
+          <InputGroupAddon addonType="append">
+            <InputGroupText>Add Debug Sensei to the lists?</InputGroupText>
+          </InputGroupAddon>
+          <Input
+            onChange={() => { selectCaveMap(!selectedCaveMap); }}
+            value={selectedCaveMap}
+            type="checkbox"
+          />
+        </InputGroup>
       </Col>
       <Col>
-        <b>Add DE units, nations and commanders?</b>
-        <input type="checkbox" value={selectedCaveMap} onChange={() => { selectCaveMap(!selectedCaveMap); }} />
+        <InputGroup size="sm">
+          <InputGroupAddon addonType="append">
+            <InputGroupText>Add DE units, nations and commanders?</InputGroupText>
+          </InputGroupAddon>
+          <Input
+            onChange={() => { selectCaveMap(!selectedCaveMap); }}
+            value={selectedCaveMap}
+            type="checkbox"
+          />
+        </InputGroup>
       </Col>
     </Row>
     <br />
