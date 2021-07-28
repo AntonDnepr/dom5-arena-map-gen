@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Step1 from './Step1';
 import Step2 from './Step2';
+import Mods from './consts';
 
 const NextStepButton1 = ({ setCurrentStep }) => (
   <Row>
@@ -74,17 +75,16 @@ function App() {
   const [selectedCommanders, addCommander] = useState([]);
   const [selectedUnits, addUnit] = useState([]);
   const [selectedCaveMap, selectCaveMap] = useState(false);
+  const [selectedMods, selectMod] = useState([Mods.VANILLA]);
 
   useEffect(() => {
-    if (nations.length < 1 && !isLoading) {
-      setLoading(true);
-      axios.get('/api/v0/autocomplete/nations/')
-        .then((response) => {
-          setLoading(false);
-          setNations(response.data);
-        });
-    }
-  }, [nations.length, isLoading]);
+    setLoading(true);
+    axios.get(`/api/v0/autocomplete/nations/?modded=${selectedMods.join(',')}`)
+      .then((response) => {
+        setLoading(false);
+        setNations(response.data);
+      });
+  }, [selectedMods]);
   const selectedNationsArray = [
     selectedLandNation1, selectedLandNation2, selectedWaterNation1, selectedWaterNation2,
   ];
@@ -117,6 +117,17 @@ function App() {
       });
   };
 
+  const updateSelectedMods = (valueType, value) => {
+    if (value && !selectedMods.includes(valueType)) {
+      selectMod([...selectedMods, valueType]);
+    } else if (!value && selectedMods.includes(valueType)) {
+      const removeIndex = selectedMods.indexOf(valueType);
+      const arrayCopy = selectedMods.slice();
+      arrayCopy.splice(removeIndex, 1);
+      selectMod(arrayCopy);
+    }
+  };
+
   return (
     <Container>
       {currentStep === 'step1' && (
@@ -127,6 +138,7 @@ function App() {
         selectWaterNations={[selectWaterNation1, selectWaterNation2]}
         selectedCaveMap={selectedCaveMap}
         selectCaveMap={selectCaveMap}
+        updateSelectedMods={updateSelectedMods}
       />
       )}
       {showNextStep && (
