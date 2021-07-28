@@ -128,7 +128,9 @@ def parse_dm_files():
                         nation_id, nation_name, nation_era = "", "", ""
                     if new_monster or new_nation:
                         if "#name" in line and "nametype" not in line:
-                            name = " ".join(line.split(" ")[1:]).replace('"', "")
+                            name = (
+                                " ".join(line.split(" ")[1:]).replace('"', "").strip()
+                            )
                             if new_monster:
                                 monster_name = name
                             elif new_nation:

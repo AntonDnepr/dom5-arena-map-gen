@@ -83,6 +83,9 @@ function App() {
       .then((response) => {
         setLoading(false);
         setNations(response.data);
+      }).catch((error) => {
+        console.log('Error', error);
+        return [];
       });
   }, [selectedMods]);
   const selectedNationsArray = [
@@ -114,6 +117,9 @@ function App() {
         setLoading(false);
         setfinalMapData(response.data);
         setCurrentStep('final');
+      }).catch((error) => {
+        console.log('Error', error);
+        return [];
       });
   };
 
