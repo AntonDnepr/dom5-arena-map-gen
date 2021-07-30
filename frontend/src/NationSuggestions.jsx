@@ -25,11 +25,11 @@ const renderSuggestion = (suggestion) => (
 );
 
 class NationSuggestions extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       value: '',
-      suggestions: props.nations,
+      suggestions: [],
     };
   }
 

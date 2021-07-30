@@ -111,7 +111,6 @@ const Step2 = ({
             (obj) => obj.for_nation === selectedNation,
           ).map((commander) => (
             <CommanderRow
-              units={units}
               key={`${commander.id}`}
               commander={commander}
               selectedCommanders={selectedCommanders}
@@ -126,7 +125,6 @@ const Step2 = ({
             (obj) => obj.for_nation === selectedNation,
           ).map((unit) => (
             <UnitRow
-              units={units}
               key={`${unit.id}`}
               unit={unit}
               selectedUnits={selectedUnits}
