@@ -4,6 +4,7 @@ import Autosuggest from 'react-autosuggest';
 import PropTypes from 'prop-types';
 
 const getSuggestions = (value, nations) => {
+  if (value === '') return nations;
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   if (inputLength === 0) {
@@ -24,11 +25,11 @@ const renderSuggestion = (suggestion) => (
 );
 
 class NationSuggestions extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       value: '',
-      suggestions: [],
+      suggestions: props.nations,
     };
   }
 
@@ -60,6 +61,8 @@ class NationSuggestions extends React.Component {
       });
     };
 
+    shouldRenderSuggestions = () => true;
+
     render() {
       const { value, suggestions } = this.state;
 
@@ -76,6 +79,7 @@ class NationSuggestions extends React.Component {
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          shouldRenderSuggestions={this.shouldRenderSuggestions}
           getSuggestionValue={getSuggestionValue}
           onSuggestionSelected={this.onSuggestionSelected}
           renderSuggestion={renderSuggestion}
