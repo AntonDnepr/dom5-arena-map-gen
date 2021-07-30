@@ -78,7 +78,7 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 ## Changelog
 - 20/05/2021 - Cave map support
 - 02/06/2021 - Add mapname change, tweaked text; Add Holy for magic paths;
-- ?? - Add DomEnh and DebugMod support
+- 30/07/2021 - Add DomEnh and DebugMod support
 
 ## Plans for the future versions
 - Add sprites to the suggestions (maybe);

@@ -27,6 +27,10 @@ function Step1({
             <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1404827698" target="_blank" rel="noreferrer nofollow">Arena map</a>
           </p>
           <p>Please support author of the original map.</p>
+          <p>
+            You can help development of this tool / report a bug &nbsp;
+            <a href="https://github.com/AntonDnepr/dom5-arena-map-gen" target="_blank" rel="noreferrer nofollow">here</a>
+          </p>
         </Col>
       </Row>
       <Row>
