@@ -2,7 +2,13 @@ from django.db import models
 
 
 class BaseModel(models.Model):
+
+    VANILLA, DE, DEBUG = 1, 2, 3
+
+    CHOICES = ((VANILLA, "VANILLA"), (DE, "DE"), (DEBUG, "DEBUG"))
+
     name = models.CharField(max_length=256)
+    modded = models.PositiveSmallIntegerField(default=VANILLA, choices=CHOICES)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

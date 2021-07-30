@@ -8,7 +8,7 @@ import uuidv4 from './utils';
 const { CancelToken } = axios;
 let cancelToken;
 
-const getUnitSuggestions = (value) => {
+const getUnitSuggestions = (value, selectedMods) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
   if (inputLength > 1) {
@@ -19,7 +19,7 @@ const getUnitSuggestions = (value) => {
 
     // Save the cancel token for the current request
     cancelToken = CancelToken.source();
-    return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}`, {
+    return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}&modded=${selectedMods.join(',')}`, {
       cancelToken: cancelToken.token,
     }).then((response) => response.data).catch((error) => {
       console.log('Error', error);
@@ -75,8 +75,9 @@ class UnitSuggestions extends React.Component {
     onSuggestionsFetchRequested = ({ value }) => {
       const inputValue = value.trim().toLowerCase();
       const inputLength = inputValue.length;
+      const { selectedMods } = this.props;
       if (inputLength > 1) {
-        getUnitSuggestions(value).then((suggestions) => {
+        getUnitSuggestions(value, selectedMods).then((suggestions) => {
           this.setState({
             suggestions,
           });
@@ -121,6 +122,7 @@ UnitSuggestions.propTypes = {
   selectUnit: PropTypes.func.isRequired,
   selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedNation: PropTypes.string.isRequired,
+  selectedMods: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default UnitSuggestions;
