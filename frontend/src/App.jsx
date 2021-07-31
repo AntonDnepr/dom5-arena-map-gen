@@ -63,7 +63,9 @@ FinalMapComponent.propTypes = {
 
 function App() {
   const [nations, setNations] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [units, setUnits] = useState([]);
+  const [isLoadingNations, setLoadingNations] = useState(false);
+  const [isLoadingUnits, setLoadingUnits] = useState(false);
   const [finalMapData, setfinalMapData] = useState('');
   const [currentStep, setCurrentStep] = useState('step1');
   const [nationForStep2, setNationForStep2] = useState('');
@@ -78,10 +80,19 @@ function App() {
   const [selectedMods, selectMod] = useState([Mods.VANILLA]);
 
   useEffect(() => {
-    setLoading(true);
+    setLoadingNations(true);
+    setLoadingUnits(true);
+    axios.get(`/api/v0/autocomplete/units/?modded=${selectedMods.join(',')}`)
+      .then((response) => {
+        setLoadingUnits(false);
+        setUnits(response.data);
+      }).catch((error) => {
+        console.log('Error', error);
+        return [];
+      });
     axios.get(`/api/v0/autocomplete/nations/?modded=${selectedMods.join(',')}`)
       .then((response) => {
-        setLoading(false);
+        setLoadingNations(false);
         setNations(response.data);
       }).catch((error) => {
         console.log('Error', error);
@@ -111,10 +122,10 @@ function App() {
       units: selectedUnits,
       use_cave_map: selectedCaveMap,
     };
-    setLoading(true);
+    setLoadingNations(true);
     axios.post('/api/v0/generate-map/', objectToPost)
       .then((response) => {
-        setLoading(false);
+        setLoadingNations(false);
         setfinalMapData(response.data);
         setCurrentStep('final');
       }).catch((error) => {
@@ -139,7 +150,7 @@ function App() {
       {currentStep === 'step1' && (
       <Step1
         nations={nations}
-        isLoading={isLoading}
+        isLoading={isLoadingNations}
         selectLandNations={[selectLandNation1, selectLandNation2]}
         selectWaterNations={[selectWaterNation1, selectWaterNation2]}
         selectedCaveMap={selectedCaveMap}
@@ -155,6 +166,8 @@ function App() {
       {currentStep === 'step2' && (
         <>
           <Step2
+            units={units}
+            isLoading={isLoadingUnits}
             selectedNation={nationForStep2}
             selectCommander={addCommander}
             selectedCommanders={selectedCommanders}
@@ -162,7 +175,7 @@ function App() {
             selectUnit={addUnit}
             selectedMods={selectedMods}
           />
-          {showNextNation
+          {showNextNation && !isLoadingUnits
           && (
           <NextNationButton
             setNationIndex={setNationIndex}

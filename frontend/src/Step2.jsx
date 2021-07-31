@@ -9,7 +9,14 @@ import UnitRow from './UnitRow';
 import uuidv4 from './utils';
 
 const Step2 = ({
-  selectedNation, selectCommander, selectedCommanders, selectedUnits, selectUnit, selectedMods,
+  units,
+  isLoading,
+  selectedNation,
+  selectCommander,
+  selectedCommanders,
+  selectedUnits,
+  selectUnit,
+  selectedMods,
 }) => {
   const deleteRow = (uuid, arrayToFilter) => {
     const newSelection = arrayToFilter.filter(
@@ -131,17 +138,29 @@ const Step2 = ({
       <Row>
         <Col>
           <p>Select commanders</p>
-          <UnitSuggestions
-            id="commander"
-            selectUnit={selectCommander}
-            selectedUnits={selectedCommanders}
-            selectedNation={selectedNation}
-            selectedMods={selectedMods}
-          />
+          {isLoading ? 'loading' : (
+            <UnitSuggestions
+              id="commander"
+              units={units}
+              selectUnit={selectCommander}
+              selectedUnits={selectedCommanders}
+              selectedNation={selectedNation}
+              selectedMods={selectedMods}
+            />
+          )}
         </Col>
         <Col>
           <p>Select units to add to the commanders</p>
-          <UnitSuggestions id="unit" selectUnit={selectUnit} selectedUnits={selectedUnits} selectedNation={selectedNation} selectedMods={selectedMods} />
+          {isLoading ? 'loading' : (
+            <UnitSuggestions
+              id="unit"
+              units={units}
+              selectUnit={selectUnit}
+              selectedUnits={selectedUnits}
+              selectedNation={selectedNation}
+              selectedMods={selectedMods}
+            />
+          )}
         </Col>
       </Row>
     </>
@@ -149,6 +168,8 @@ const Step2 = ({
 };
 
 Step2.propTypes = {
+  units: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isLoading: PropTypes.bool.isRequired,
   selectedNation: PropTypes.string.isRequired,
   selectCommander: PropTypes.func.isRequired,
   selectedCommanders: PropTypes.arrayOf(PropTypes.object).isRequired,

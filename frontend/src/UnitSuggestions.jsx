@@ -1,32 +1,18 @@
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import PropTypes from 'prop-types';
 import uuidv4 from './utils';
 
-const { CancelToken } = axios;
-let cancelToken;
+function escapeRegexCharacters(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-const getUnitSuggestions = (value, selectedMods) => {
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
-  if (inputLength > 1) {
-    // Check if there are any previous pending requests
-    if (typeof cancelToken !== typeof undefined) {
-      cancelToken.cancel('Operation canceled due to new request.');
-    }
+const getUnitSuggestions = (value, units) => {
+  const escapedValue = escapeRegexCharacters(value.trim());
+  const regex = new RegExp(`^${escapedValue}`, 'i');
 
-    // Save the cancel token for the current request
-    cancelToken = CancelToken.source();
-    return axios.get(`/api/v0/autocomplete/units/?search=${inputValue}&modded=${selectedMods.join(',')}`, {
-      cancelToken: cancelToken.token,
-    }).then((response) => response.data).catch((error) => {
-      console.log('Error', error);
-      return [];
-    });
-  }
-  return [];
+  return units.filter((unit) => regex.test(unit.name) || regex.test(unit.dominion_id));
 };
 
 const getUnitSuggestionValue = (suggestion) => `${suggestion.dominion_id}/${suggestion.name}`;
@@ -73,18 +59,11 @@ class UnitSuggestions extends React.Component {
     }
 
     onSuggestionsFetchRequested = ({ value }) => {
-      const inputValue = value.trim().toLowerCase();
-      const inputLength = inputValue.length;
-      const { selectedMods } = this.props;
-      if (inputLength > 1) {
-        getUnitSuggestions(value, selectedMods).then((suggestions) => {
-          this.setState({
-            suggestions,
-          });
-        }).catch((error) => {
-          console.log('AutosuggestError', error);
-        });
-      }
+      const { units } = this.props;
+      const suggestions = getUnitSuggestions(value, units).slice(0, 100);
+      this.setState({
+        suggestions,
+      });
     };
 
     onSuggestionsClearRequested = () => {
@@ -92,6 +71,8 @@ class UnitSuggestions extends React.Component {
         suggestions: [],
       });
     };
+
+    shouldRenderSuggestions = () => true;
 
     render() {
       const { value, suggestions } = this.state;
@@ -111,6 +92,7 @@ class UnitSuggestions extends React.Component {
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={getUnitSuggestionValue}
           onSuggestionSelected={this.onSuggestionSelected}
+          shouldRenderSuggestions={this.shouldRenderSuggestions}
           renderSuggestion={renderUnitSuggestion}
           inputProps={inputProps}
         />
@@ -119,10 +101,10 @@ class UnitSuggestions extends React.Component {
 }
 
 UnitSuggestions.propTypes = {
+  units: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectUnit: PropTypes.func.isRequired,
   selectedUnits: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedNation: PropTypes.string.isRequired,
-  selectedMods: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default UnitSuggestions;
