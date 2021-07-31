@@ -14,11 +14,9 @@ class NationSerializer(serializers.ModelSerializer):
 
 
 class UnitSerializer(serializers.ModelSerializer):
-    nations = NationSerializer(many=True)
-
     class Meta:
         model = Unit
-        fields = ["dominion_id", "name", "commander", "nations"]
+        fields = ["dominion_id", "name"]
 
 
 ERAS = {"EA": 1, "MA": 2, "LA": 3}
