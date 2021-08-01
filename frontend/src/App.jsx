@@ -1,65 +1,17 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-  Container, Row, Col, Button,
+  Container,
 } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import Steps from './Steps.ts';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Mods from './consts';
-
-const NextStepButton1 = ({ setCurrentStep }) => (
-  <Row>
-    <Col>
-      <Button onClick={() => setCurrentStep('step2')}>Show next step</Button>
-    </Col>
-  </Row>
-);
-
-NextStepButton1.propTypes = {
-  setCurrentStep: PropTypes.func.isRequired,
-};
-
-const NextNationButton = ({ setNationIndex, nationIndex }) => (
-  <Row>
-    <Col>
-      <Button onClick={() => setNationIndex(nationIndex + 1)}>Configure next nation</Button>
-    </Col>
-  </Row>
-);
-
-NextNationButton.propTypes = {
-  setNationIndex: PropTypes.func.isRequired,
-  nationIndex: PropTypes.number.isRequired,
-};
-
-const GenerateMapButton = ({ setGenerateMapRequest }) => (
-  <Row>
-    <Col>
-      <Button onClick={() => setGenerateMapRequest()}>Generate map</Button>
-    </Col>
-  </Row>
-);
-
-GenerateMapButton.propTypes = {
-  setGenerateMapRequest: PropTypes.func.isRequired,
-};
-
-const FinalMapComponent = ({ finalMapData }) => (
-  <Row>
-    <Col>
-      <p>Copy the text below into a backup of Arena.map file</p>
-      <div style={{ whiteSpace: 'pre-line' }}>
-        {finalMapData}
-      </div>
-    </Col>
-  </Row>
-);
-
-FinalMapComponent.propTypes = {
-  finalMapData: PropTypes.string.isRequired,
-};
+import Step2Button from './Components/Step2Button';
+import NextNationButton from './Components/NextNationButton';
+import GenerateMapButton from './Components/GenerateMapButton';
+import FinalMapComponent from './Components/FinalMapComponent';
 
 function App() {
   const [nations, setNations] = useState([]);
@@ -67,7 +19,7 @@ function App() {
   const [isLoadingNations, setLoadingNations] = useState(false);
   const [isLoadingUnits, setLoadingUnits] = useState(false);
   const [finalMapData, setfinalMapData] = useState('');
-  const [currentStep, setCurrentStep] = useState('step1');
+  const [currentStep, setCurrentStep] = useState(Steps.Step1);
   const [nationForStep2, setNationForStep2] = useState('');
   const [nationIndex, setNationIndex] = useState(0);
   const [selectedLandNation1, selectLandNation1] = useState('');
@@ -102,10 +54,10 @@ function App() {
   const selectedNationsArray = [
     selectedLandNation1, selectedLandNation2, selectedWaterNation1, selectedWaterNation2,
   ];
-  const showNextStep = selectedNationsArray.some((x) => x !== '') && currentStep === 'step1';
+  const showNextStep = selectedNationsArray.some((x) => x !== '') && currentStep === Steps.Step1;
   const lengthOfNations = selectedNationsArray.filter((x) => x !== '').length;
   const showNextNation = lengthOfNations > nationIndex + 1;
-  if (currentStep === 'step2') {
+  if (currentStep === Steps.Step2) {
     // eslint-disable-next-line prefer-destructuring
     const selectedNation = selectedNationsArray.filter((x) => x !== '')[nationIndex];
     if (selectedNation !== nationForStep2) {
@@ -127,7 +79,7 @@ function App() {
       .then((response) => {
         setLoadingNations(false);
         setfinalMapData(response.data);
-        setCurrentStep('final');
+        setCurrentStep(Steps.Final);
       }).catch((error) => {
         console.log('Error', error);
         return [];
@@ -147,7 +99,7 @@ function App() {
 
   return (
     <Container>
-      {currentStep === 'step1' && (
+      {currentStep === Steps.Step1 && (
       <Step1
         nations={nations}
         isLoading={isLoadingNations}
@@ -159,11 +111,11 @@ function App() {
       />
       )}
       {showNextStep && (
-      <NextStepButton1
+      <Step2Button
         setCurrentStep={setCurrentStep}
       />
       )}
-      {currentStep === 'step2' && (
+      {currentStep === Steps.Step2 && (
         <>
           <Step2
             units={units}
@@ -185,7 +137,7 @@ function App() {
           {!showNextNation && <GenerateMapButton setGenerateMapRequest={setGenerateMapRequest} />}
         </>
       )}
-      {currentStep === 'final' && <FinalMapComponent finalMapData={finalMapData} />}
+      {currentStep === Steps.Final && <FinalMapComponent finalMapData={finalMapData} />}
     </Container>
   );
 }
