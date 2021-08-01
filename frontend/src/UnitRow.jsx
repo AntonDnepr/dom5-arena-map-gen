@@ -4,10 +4,15 @@ import {
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const zeroPad = (num, places) => String(num).padStart(places, '0');
+
 const UnitRow = ({
   unit, selectedUnits, duplicateRow, deleteRow, saveUnitQuantity,
 }) => (
   <Row>
+    <Col xs={1}>
+      <img src={`https://larzm42.github.io/dom5inspector/images/sprites/${zeroPad(unit.dominion_id, 4)}_1.png`} alt="Test" />
+    </Col>
     <Col>
       <InputGroup size="sm">
         <InputGroupAddon addonType="prepend">

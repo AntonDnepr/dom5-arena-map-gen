@@ -4,6 +4,8 @@ import {
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+const zeroPad = (num, places) => String(num).padStart(places, '0');
+
 const EditMagic = ({ saveMagicEdit, setCommanderMagic, commanderMagic }) => (
   <Row>
     <Col>
@@ -141,18 +143,27 @@ const CommanderRow = ({
   const onClick = (param) => setshowEditMagic(!param);
   const [commanderMagic, setCommanderMagic] = useState(commander.magic || {});
   return (
-    <div>
-      (
-      {commander.dominion_id}
-      )
-      {commander.name}
-      {' '}
-      <Button color="secondary" onClick={() => onClick(showEditMagic)}>Edit Magic</Button>
-      {' '}
-      <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
-      {' '}
-      <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
-      { showEditMagic ? (
+    <>
+      <Row>
+        <Col xs={1}>
+          <img src={`https://larzm42.github.io/dom5inspector/images/sprites/${zeroPad(commander.dominion_id, 4)}_1.png`} alt="Test" />
+        </Col>
+        <Col xs={2}>
+          (
+          {commander.dominion_id}
+          )
+          {commander.name}
+        </Col>
+        <Col>
+          {' '}
+          <Button color="secondary" onClick={() => onClick(showEditMagic)}>Edit Magic</Button>
+          {' '}
+          <Button color="info" onClick={() => duplicateRow(commander.id, selectedCommanders)}>Duplicate</Button>
+          {' '}
+          <Button color="danger" onClick={() => deleteRow(commander.id, selectedCommanders)}>Delete</Button>
+        </Col>
+      </Row>
+      { showEditMagic && (
         <EditMagic
           saveMagicEdit={() => {
             saveMagicEdit(commander.id, selectedCommanders, commanderMagic);
@@ -161,8 +172,8 @@ const CommanderRow = ({
           setCommanderMagic={setCommanderMagic}
           commanderMagic={commanderMagic}
         />
-      ) : null }
-    </div>
+      )}
+    </>
   );
 };
 
