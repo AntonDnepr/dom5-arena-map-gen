@@ -4,14 +4,11 @@ import {
   Container,
 } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
-import Steps from './Steps.ts';
 import Step1 from './Step1';
 import Step2 from './Step2';
-import Mods from './consts';
-import NationNavigation from './Components/NationNavigation';
-import GenerateMapButton from './Components/GenerateMapButton';
+import { Mods, Steps } from './consts';
 import FinalMapComponent from './Components/FinalMapComponent';
-import StepNavigation from './Components/StepNavigation';
+import Navigation from './Components/Navigation';
 
 function App() {
   const [nations, setNations] = useState([]);
@@ -55,7 +52,6 @@ function App() {
   }, [selectedMods]);
 
   const lengthOfNations = selectedNations.filter((x) => x !== '').length;
-  const showNextNation = lengthOfNations > nationIndex + 1;
   if (currentStep === Steps.Step2) {
     // eslint-disable-next-line prefer-destructuring
     const selectedNation = selectedNations.filter((x) => x !== '')[nationIndex];
@@ -122,18 +118,17 @@ function App() {
             selectUnit={addUnit}
             selectedMods={selectedMods}
           />
-          {!isLoadingUnits
-            && (
-              <NationNavigation
-                lengthOfNations={lengthOfNations}
-                setNationIndex={setNationIndex}
-                nationIndex={nationIndex}
-              />
-            )}
-          {!showNextNation && <GenerateMapButton setGenerateMapRequest={setGenerateMapRequest} />}
         </>
       )}
-      <StepNavigation currentStep={currentStep} setCurrentStep={setCurrentStep} />
+      <Navigation
+        currentStep={currentStep}
+        setCurrentStep={setCurrentStep}
+        lengthOfNations={lengthOfNations}
+        setNationIndex={setNationIndex}
+        nationIndex={nationIndex}
+        setGenerateMapRequest={setGenerateMapRequest}
+        isLoadingUnits={isLoadingUnits}
+      />
       {currentStep === Steps.Final && <FinalMapComponent finalMapData={finalMapData} />}
     </Container>
   );

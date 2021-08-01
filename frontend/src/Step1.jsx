@@ -4,7 +4,7 @@ import {
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import NationSuggestions from './NationSuggestions';
-import Mods from './consts';
+import { Mods } from './consts';
 
 function Step1({
   nations,
