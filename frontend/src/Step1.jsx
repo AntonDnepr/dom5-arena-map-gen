@@ -9,6 +9,7 @@ import Mods from './consts';
 function Step1({
   nations,
   isLoading,
+  selectedNations,
   selectLandNations,
   selectWaterNations,
   selectCaveMap,
@@ -109,12 +110,12 @@ function Step1({
         <Col>
           Land nation 1:
           {' '}
-          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectLandNations[0]} id="land1" />}
+          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectLandNations[0]} selectedNation={selectedNations[0]} id="land1" />}
         </Col>
         <Col>
           Land nation 2:
           {' '}
-          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectLandNations[1]} id="land2" />}
+          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectLandNations[1]} selectedNation={selectedNations[1]} id="land2" />}
         </Col>
       </Row>
       <Row>
@@ -126,12 +127,12 @@ function Step1({
         <Col>
           Water nation 1:
           {' '}
-          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectWaterNations[0]} id="water1" />}
+          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectWaterNations[0]} selectedNation={selectedNations[2]} id="water1" />}
         </Col>
         <Col>
           Water nation 2:
           {' '}
-          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectWaterNations[1]} id="water2" />}
+          {isLoading ? 'loading' : <NationSuggestions nations={nations} selectNation={selectWaterNations[1]} selectedNation={selectedNations[3]} id="water2" />}
         </Col>
       </Row>
     </>
@@ -141,6 +142,7 @@ function Step1({
 Step1.propTypes = {
   nations: PropTypes.arrayOf(PropTypes.object).isRequired,
   isLoading: PropTypes.bool.isRequired,
+  selectedNations: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectLandNations: PropTypes.arrayOf(PropTypes.func).isRequired,
   selectWaterNations: PropTypes.arrayOf(PropTypes.func).isRequired,
   selectCaveMap: PropTypes.func.isRequired,

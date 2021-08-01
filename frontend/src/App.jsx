@@ -8,10 +8,10 @@ import Steps from './Steps.ts';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Mods from './consts';
-import Step2Button from './Components/Step2Button';
-import NextNationButton from './Components/NextNationButton';
+import NationNavigation from './Components/NationNavigation';
 import GenerateMapButton from './Components/GenerateMapButton';
 import FinalMapComponent from './Components/FinalMapComponent';
+import StepNavigation from './Components/StepNavigation';
 
 function App() {
   const [nations, setNations] = useState([]);
@@ -22,10 +22,12 @@ function App() {
   const [currentStep, setCurrentStep] = useState(Steps.Step1);
   const [nationForStep2, setNationForStep2] = useState('');
   const [nationIndex, setNationIndex] = useState(0);
-  const [selectedLandNation1, selectLandNation1] = useState('');
-  const [selectedLandNation2, selectLandNation2] = useState('');
-  const [selectedWaterNation1, selectWaterNation1] = useState('');
-  const [selectedWaterNation2, selectWaterNation2] = useState('');
+  const [selectedNations, setSelectNations] = useState(['', '', '', '']);
+  const setSelectNationsWithIndex = (index) => (value) => {
+    const temp = [...selectedNations];
+    temp[index] = value;
+    setSelectNations(temp);
+  };
   const [selectedCommanders, addCommander] = useState([]);
   const [selectedUnits, addUnit] = useState([]);
   const [selectedCaveMap, selectCaveMap] = useState(false);
@@ -51,25 +53,22 @@ function App() {
         return [];
       });
   }, [selectedMods]);
-  const selectedNationsArray = [
-    selectedLandNation1, selectedLandNation2, selectedWaterNation1, selectedWaterNation2,
-  ];
-  const showNextStep = selectedNationsArray.some((x) => x !== '') && currentStep === Steps.Step1;
-  const lengthOfNations = selectedNationsArray.filter((x) => x !== '').length;
+
+  const lengthOfNations = selectedNations.filter((x) => x !== '').length;
   const showNextNation = lengthOfNations > nationIndex + 1;
   if (currentStep === Steps.Step2) {
     // eslint-disable-next-line prefer-destructuring
-    const selectedNation = selectedNationsArray.filter((x) => x !== '')[nationIndex];
+    const selectedNation = selectedNations.filter((x) => x !== '')[nationIndex];
     if (selectedNation !== nationForStep2) {
       setNationForStep2(selectedNation);
     }
   }
   const setGenerateMapRequest = () => {
     const objectToPost = {
-      land_nation_1: selectedLandNation1,
-      land_nation_2: selectedLandNation2,
-      water_nation_1: selectedWaterNation1,
-      water_nation_2: selectedWaterNation2,
+      land_nation_1: selectedNations[0],
+      land_nation_2: selectedNations[1],
+      water_nation_1: selectedNations[2],
+      water_nation_2: selectedNations[3],
       commanders: selectedCommanders,
       units: selectedUnits,
       use_cave_map: selectedCaveMap,
@@ -100,20 +99,16 @@ function App() {
   return (
     <Container>
       {currentStep === Steps.Step1 && (
-      <Step1
-        nations={nations}
-        isLoading={isLoadingNations}
-        selectLandNations={[selectLandNation1, selectLandNation2]}
-        selectWaterNations={[selectWaterNation1, selectWaterNation2]}
-        selectedCaveMap={selectedCaveMap}
-        selectCaveMap={selectCaveMap}
-        updateSelectedMods={updateSelectedMods}
-      />
-      )}
-      {showNextStep && (
-      <Step2Button
-        setCurrentStep={setCurrentStep}
-      />
+        <Step1
+          nations={nations}
+          isLoading={isLoadingNations}
+          selectedNations={selectedNations}
+          selectLandNations={[setSelectNationsWithIndex(0), setSelectNationsWithIndex(1)]}
+          selectWaterNations={[setSelectNationsWithIndex(2), setSelectNationsWithIndex(3)]}
+          selectedCaveMap={selectedCaveMap}
+          selectCaveMap={selectCaveMap}
+          updateSelectedMods={updateSelectedMods}
+        />
       )}
       {currentStep === Steps.Step2 && (
         <>
@@ -127,16 +122,18 @@ function App() {
             selectUnit={addUnit}
             selectedMods={selectedMods}
           />
-          {showNextNation && !isLoadingUnits
-          && (
-          <NextNationButton
-            setNationIndex={setNationIndex}
-            nationIndex={nationIndex}
-          />
-          )}
+          {!isLoadingUnits
+            && (
+              <NationNavigation
+                lengthOfNations={lengthOfNations}
+                setNationIndex={setNationIndex}
+                nationIndex={nationIndex}
+              />
+            )}
           {!showNextNation && <GenerateMapButton setGenerateMapRequest={setGenerateMapRequest} />}
         </>
       )}
+      <StepNavigation currentStep={currentStep} setCurrentStep={setCurrentStep} />
       {currentStep === Steps.Final && <FinalMapComponent finalMapData={finalMapData} />}
     </Container>
   );

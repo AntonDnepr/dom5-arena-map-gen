@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 const GenerateMapButton = ({ setGenerateMapRequest }) => (
   <Row>
     <Col>
-      <Button onClick={() => setGenerateMapRequest()}>Generate map</Button>
+      <Button color="success" onClick={() => setGenerateMapRequest()}>Generate map</Button>
     </Col>
   </Row>
 );
