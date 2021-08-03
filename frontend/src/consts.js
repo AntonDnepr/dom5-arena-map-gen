@@ -4,4 +4,10 @@ const Mods = {
   DEBUG: 3,
 };
 
-export default Mods;
+const Steps = Object.freeze({
+  Step1: 0,
+  Step2: 1,
+  Final: 2,
+});
+
+export { Mods, Steps };
