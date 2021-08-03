@@ -81,7 +81,6 @@ To use cool github linking to the issue please add #taskNumber in the end. E.g.:
 - 30/07/2021 - Add DomEnh and DebugMod support
 
 ## Plans for the future versions
-- Add sprites to the suggestions (maybe);
 - Automate pulling new data for dominions;
 - Allow custom mods load;
 - Add equipment screen for the commanders;
