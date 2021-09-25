@@ -97,7 +97,8 @@ class GenerateMapSerializer(serializers.Serializer):
                 if magic:
                     commander_data["magic"] = {}
                     for key, value in magic.items():
-                        commander_data["magic"][f"mag_{key.lower()}"] = value
+                        if value:
+                            commander_data["magic"][f"mag_{key.lower()}"] = value
                 nation_dict[dominion_id].append(
                     {commander["dominion_id"]: commander_data}
                 )
