@@ -17,7 +17,7 @@
     "reactstrap": "^8.8.1",
     "web-vitals": "^0.2.4",
     "babel-eslint": "^10.1.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb": "^18.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
