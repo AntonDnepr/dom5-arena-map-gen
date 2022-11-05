@@ -380,3 +380,40 @@ def test_final_view(data_for_mapgen, client):
     assert mapgenerated_text[1] in final_map
     assert "$nation3" not in final_map
     assert "$nation4" not in final_map
+
+
+def test_index_error_in_process_data(data_for_mapgen):
+    data = {
+        "commanders": [
+            {
+                "dominion_id": "1786",
+                "for_nation": "(EA) Tir na n'Og",
+                "id": "6a10c26a-96dc-49c4-9663-75151a3a609a",
+                "name": "Mother Ghul",
+                "quantity": 1,
+            }
+        ],
+        "land_nation_1": "(EA) Tir na n'Og",
+        "land_nation_2": "(EA) T'ien Ch'i",
+        "units": [
+            {
+                "dominion_id": "3478",
+                "for_nation": "(EA) T'ien Ch'i",
+                "id": "36aa3812-5cfa-4110-8c9e-72539ccda0e1",
+                "name": "Ghul",
+                "quantity": 1,
+            },
+            {
+                "dominion_id": "2",
+                "for_nation": "(EA) Tir na n'Og",
+                "id": "62a592fb-5685-41e9-9a02-178b9d4a8982",
+                "name": "Standard",
+                "quantity": 1,
+            },
+        ],
+        "use_cave_map": False,
+        "water_nation_1": "",
+        "water_nation_2": "",
+    }
+    serializer = GenerateMapSerializer(data=data)
+    assert not serializer.is_valid()

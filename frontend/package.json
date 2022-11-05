@@ -46,6 +46,6 @@
     "eslint-config-airbnb": "^18.2.1"
   },
   "engines": {
-    "node": "==10.24.x"
+    "node": "==12.22.x"
   }
 }
