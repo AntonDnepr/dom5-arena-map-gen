@@ -24,7 +24,7 @@ ipython = "*"                        # Better Python shell
 pre-commit = "*"
 prospector = ">=1.1.6.4"
 Faker = "*"
-black = "==20.8b1"
+black = "*"
 flake8 = "==3.8.4"                     # Old version, because prospector stick with old deps of pyflake and pycodestyles
 autopep8 = "==1.5.5"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
 isort = "*"
@@ -40,7 +40,7 @@ pytest-env = "*"
 django-extensions = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.10"
 
 [scripts]
 go-docker = "docker-compose up -d"
