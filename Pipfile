@@ -4,10 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "<3"                        # Basics stuff (BSD-3)
+django = "<4"                        # Basics stuff (BSD-3)
 django-environ = "*"                 # Configuration by environment variables according to 12Factor model (MIT)
 django-rest-framework = "*"          # Tools for RESTful API (BSD-2)
-psycopg2-binary = "<2.9"                # Database connector (LGPL)
+psycopg2-binary = "*"                # Database connector (LGPL)
 gunicorn = "*"                       # Python WSGI HTTP Server
 django-cors-headers = "*"
 django-extensions = "*"             # Different helpers for Django REST Framework
@@ -25,8 +25,8 @@ pre-commit = "*"
 prospector = ">=1.1.6.4"
 Faker = "*"
 black = "*"
-flake8 = "==3.8.4"                     # Old version, because prospector stick with old deps of pyflake and pycodestyles
-autopep8 = "==1.5.5"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
+flake8 = "*"                     # Old version, because prospector stick with old deps of pyflake and pycodestyles
+autopep8 = "*"                   # Old version, because prospector stick with old deps of pyflake and pycodestyles
 isort = "*"
 django-silk = "*"
 pytest = "*"                   # Better testing
